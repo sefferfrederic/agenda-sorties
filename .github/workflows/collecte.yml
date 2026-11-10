@@ -1,0 +1,64 @@
+# Chaque nuit : lit les agendas, met à jour public/data/events.json et publie l'appli sur GitHub Pages.
+name: Collecte et publication
+
+on:
+  schedule:
+    - cron: '17 3 * * *'   # 4h17 (heure d'hiver) / 5h17 (heure d'été) à Liège
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths: ['collector/**', '.github/workflows/**', 'public/**']
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: collecte
+  cancel-in-progress: false
+
+jobs:
+  collecte:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Installer le collecteur
+        run: npm install --no-audit --no-fund
+        working-directory: collector
+
+      - name: Lire les sources
+        run: node index.js
+        working-directory: collector
+        continue-on-error: true   # une mauvaise nuit ne bloque pas la publication
+
+      - name: Construire la page et les icônes
+        run: |
+          node collector/build-page.js
+          convert -background none public/icon.svg -resize 192x192 public/icon-192.png
+          convert -background none public/icon.svg -resize 512x512 public/icon-512.png
+
+      - name: Enregistrer les données du jour
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "agenda-bot"
+          git config user.email "agenda-bot@users.noreply.github.com"
+          git add public/data/events.json collector/geocache.json
+          git diff --cached --quiet || git commit -m "Agenda du $(date +%F)"
+          git push
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - id: deploy
+        uses: actions/deploy-pages@v4
