@@ -81,6 +81,10 @@ header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; 
 .day.cal svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; }
 .day.cal input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
 
+.search-bar { padding-block: 2px 10px; }
+.search-bar input { width: 100%; padding: 10px 14px; border-radius: 12px; border: none; background: var(--chip); color: var(--ink); font: inherit; font-size: 16px; }
+.search-bar input:focus { outline: 2px solid var(--accent); outline-offset: -2px; }
+
 .chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-block: 2px 10px; }
 .chips::-webkit-scrollbar { display: none; }
 .chip { flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; background: var(--chip); font-weight: 600; font-size: 14px; white-space: nowrap; }
@@ -174,6 +178,9 @@ details.group > .cards { margin-top: 10px; }
         <small id="eyebrow">Liège · Luxembourg</small>
         <h1 id="title">Aujourd'hui</h1>
       </div>
+      <button class="icon-btn" id="btnSearch" aria-pressed="false" aria-label="Rechercher">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
       <button class="icon-btn" id="btnMap" aria-pressed="false" aria-label="Carte">
         <svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>
       </button>
@@ -186,6 +193,7 @@ details.group > .cards { margin-top: 10px; }
         <span class="dot" id="filterCount" hidden>0</span>
       </button>
     </div>
+    <div class="search-bar" id="searchBar" hidden><input type="search" id="qInput" placeholder="Ville, mot-clé : Spa, vin chaud…" autocomplete="off"></div>
     <nav class="days" id="days" aria-label="Choisir un jour"></nav>
     <div class="chips" id="chips" role="toolbar" aria-label="Catégories"></div>
     <div class="active-filters" id="activeFilters" hidden></div>
@@ -552,13 +560,19 @@ function openLayer(html) {
 function openFilters() {
   const seg = (name, cur, opts) => `<div class="seg">${opts.map(([v, l]) => `<button data-set="${name}" data-val="${v}" aria-pressed="${String(cur) === String(v)}">${l}</button>`).join('')}</div>`;
   openLayer(`<h2>Filtres</h2>
-    <label class="field"><span>Rechercher</span><input class="search" id="q" type="search" placeholder="Ville, mot-clé : Spa, vin chaud…" value="${esc(state.q)}" autocomplete="off"></label>
     <div class="field"><span>Province</span>${seg('prov', state.prov, [['both', 'Les deux'], ['lg', 'Liège'], ['lx', 'Luxembourg']])}</div>
     <div class="field"><span>Distance depuis ${HOME.name}</span>${seg('dist', state.dist, [[10, '10 km'], [25, '25 km'], [50, '50 km'], [0, 'Tout']])}</div>
     <div class="field"><span>Moment de la journée</span>${seg('moment', state.moment, [['all', 'Tous'], ['matin', 'Matin'], ['aprem', 'Après-midi'], ['soir', 'Soirée']])}</div>
     <div class="field"><span>Prix</span>${seg('free', state.free, [[false, 'Tous'], [true, 'Gratuit uniquement']])}</div>
     <div class="sheet-actions"><button class="btn" data-reset>Réinitialiser</button><button class="btn primary" data-close>Voir les sorties</button></div>`);
-  $('#q').addEventListener('input', (ev) => { state.q = ev.target.value.trim(); render(); });
+}
+
+function toggleSearch(show) {
+  const bar = $('#searchBar');
+  const willShow = show ?? bar.hidden;
+  bar.hidden = !willShow;
+  $('#btnSearch').setAttribute('aria-pressed', String(willShow));
+  if (willShow) $('#qInput').focus();
 }
 
 function openDetail(id) {
@@ -650,28 +664,31 @@ document.addEventListener('click', (ev) => {
   if (t.dataset.clear) {
     const k = t.dataset.clear;
     if (k === 'prov') state.prov = 'both'; if (k === 'dist') state.dist = 0; if (k === 'free') state.free = false;
-    if (k === 'moment') state.moment = 'all'; if (k === 'q') state.q = '';
+    if (k === 'moment') state.moment = 'all'; if (k === 'q') { state.q = ''; $('#qInput').value = ''; }
     persist(); render(); return;
   }
   if (t.hasAttribute('data-reset')) {
     state.prov = 'both'; state.dist = 0; state.free = false; state.moment = 'all'; state.q = ''; state.cats.clear();
+    $('#qInput').value = '';
     persist(); closeLayer(); render(); return;
   }
   if (t.dataset.view) { state.view = t.dataset.view; render(); return; }
   if (t.hasAttribute('data-close')) { closeLayer(); return; }
   if (t.id === 'btnFilters') return openFilters();
+  if (t.id === 'btnSearch') return toggleSearch();
   if (t.id === 'btnFav') { state.view = state.view === 'fav' ? 'list' : 'fav'; render(); return; }
   if (t.id === 'btnMap') { state.view = state.view === 'map' ? 'list' : 'map'; ensureLeaflet().then(render); return; }
   if (t.classList.contains('card')) openDetail(t.dataset.id);
 });
 document.addEventListener('keydown', (ev) => {
-  if (ev.key === 'Escape') closeLayer();
+  if (ev.key === 'Escape') { closeLayer(); if (!$('#searchBar').hidden) toggleSearch(false); }
   if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.classList?.contains('card')) { ev.preventDefault(); openDetail(ev.target.dataset.id); }
 });
 document.addEventListener('change', (ev) => {
   if (ev.target.id === 'pickDate' && ev.target.value) { state.day = ev.target.value < TODAY ? TODAY : ev.target.value; if (state.view === 'fav') state.view = 'list'; render(); }
 });
 document.addEventListener('toggle', (ev) => { if (ev.target.id === 'ongoing') store.set('ongoingOpen', ev.target.open); }, true);
+$('#qInput').addEventListener('input', (ev) => { state.q = ev.target.value.trim(); render(); });
 
 // Carte : Leaflet chargé seulement quand on ouvre la carte.
 let leafletP = null;
