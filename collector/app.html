@@ -1,0 +1,646 @@
+<title>Sorties Liège-Luxembourg</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#d62839">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Sorties">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Mise en page : une colonne de cartes façon « tableau d'affichage de quartier », en-tête collant avec la bande des jours. */
+:root {
+  --bg: #f4f5f3;
+  --surface: #ffffff;
+  --ink: #15191f;
+  --muted: #5d6570;
+  --line: #e1e4e0;
+  --accent: #d62839;
+  --accent-ink: #ffffff;
+  --chip: #e9ebe7;
+  --c-brocante: #a0631c; --c-marche: #2f7d4a; --c-noel: #c8102e; --c-soiree: #7a3fb0;
+  --c-concert: #1f6fb2; --c-spectacle: #b5397a; --c-fete: #d9822b; --c-expo: #3d6b73;
+  --c-balade: #4f7f1f; --c-famille: #c2a000;
+  --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(21,25,31,.06), 0 4px 14px rgba(21,25,31,.05);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #1a1e24; --ink: #eef0ee; --muted: #9aa3ad; --line: #2a3038;
+    --accent: #ff4d5e; --accent-ink: #15191f; --chip: #242a31;
+    --c-brocante: #e09a4a; --c-marche: #5cc07d; --c-noel: #ff5a6e; --c-soiree: #b58af0;
+    --c-concert: #5fa8ec; --c-spectacle: #ee7ab4; --c-fete: #f2a65a; --c-expo: #7fb3bb;
+    --c-balade: #94c95a; --c-famille: #e8cc3a;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #1a1e24; --ink: #eef0ee; --muted: #9aa3ad; --line: #2a3038;
+  --accent: #ff4d5e; --accent-ink: #15191f; --chip: #242a31;
+  --c-brocante: #e09a4a; --c-marche: #5cc07d; --c-noel: #ff5a6e; --c-soiree: #b58af0;
+  --c-concert: #5fa8ec; --c-spectacle: #ee7ab4; --c-fete: #f2a65a; --c-expo: #7fb3bb;
+  --c-balade: #94c95a; --c-famille: #e8cc3a;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body { color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.4; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.wrap { max-width: 720px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* ---------- En-tête ---------- */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
+.bar { display: flex; align-items: center; gap: 8px; padding-block: 12px 4px; }
+.brand { flex: 1; min-width: 0; }
+.brand small { display: block; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+.brand h1 { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 26px; line-height: 1.05; letter-spacing: -.01em; text-wrap: balance; }
+.icon-btn { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--chip); position: relative; flex: none; }
+.icon-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.icon-btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.icon-btn .dot { position: absolute; top: 6px; right: 6px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font-size: 10px; font-weight: 700; display: grid; place-items: center; }
+
+.days { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-block: 8px; scroll-snap-type: x proximity; }
+.days::-webkit-scrollbar { display: none; }
+.day { flex: none; width: 52px; padding: 6px 0 7px; border-radius: 12px; text-align: center; background: var(--surface); border: 1px solid var(--line); scroll-snap-align: start; }
+.day .dn { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+.day .dd { display: block; font-family: var(--font-display); font-weight: 800; font-size: 20px; line-height: 1.1; }
+.day .dc { display: block; font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+.day.we { background: color-mix(in srgb, var(--accent) 7%, var(--surface)); }
+.day[aria-current="date"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.day[aria-current="date"] .dn, .day[aria-current="date"] .dc { color: inherit; opacity: .8; }
+.day.cal { display: grid; place-items: center; position: relative; }
+.day.cal svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; }
+.day.cal input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-block: 2px 10px; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; background: var(--chip); font-weight: 600; font-size: 14px; white-space: nowrap; }
+.chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--cc, var(--muted)); }
+.chip[aria-pressed="true"] { background: var(--cc, var(--ink)); color: #fff; }
+.chip[aria-pressed="true"] i { background: #fff; }
+.chip.all[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+.active-filters { display: flex; flex-wrap: wrap; gap: 6px; padding-block: 0 10px; font-size: 13px; color: var(--muted); align-items: center; }
+.active-filters button { padding: 4px 10px; border-radius: 999px; border: 1px dashed var(--line); color: var(--ink); background: var(--surface); }
+
+/* ---------- Contenu ---------- */
+main { padding-block: 14px 60px; display: grid; gap: 22px; }
+.dayhead { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.dayhead h2 { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 22px; letter-spacing: -.01em; }
+.dayhead span { color: var(--muted); font-size: 13px; font-family: var(--font-mono); white-space: nowrap; }
+section.group { display: grid; gap: 10px; }
+.group > h3 { margin: 0; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.group > h3::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+details.group > summary { list-style: none; cursor: pointer; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+details.group > summary::-webkit-details-marker { display: none; }
+details.group > summary::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+details.group > summary .tw { transition: transform .2s; display: inline-block; }
+details.group[open] > summary .tw { transform: rotate(90deg); }
+details.group > .cards { margin-top: 10px; }
+.cards { display: grid; gap: 10px; }
+
+.card { position: relative; display: grid; gap: 6px; padding: 12px 14px 12px 18px; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--line); text-align: left; width: 100%; overflow: hidden; }
+.card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--cc); }
+.card .row1 { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.cat { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--cc); }
+.price { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--chip); color: var(--muted); }
+.price.free { background: color-mix(in srgb, var(--c-marche) 16%, transparent); color: var(--c-marche); }
+.star { margin-left: auto; width: 32px; height: 32px; margin-block: -6px; margin-right: -6px; display: grid; place-items: center; border-radius: 10px; }
+.star svg { width: 20px; height: 20px; stroke: var(--muted); fill: none; stroke-width: 1.8; }
+.star[aria-pressed="true"] svg { stroke: var(--c-fete); fill: var(--c-fete); }
+.card h4 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 18px; line-height: 1.2; text-wrap: balance; }
+.meta { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 14px; color: var(--ink); }
+.meta span { display: inline-flex; align-items: center; gap: 5px; min-width: 0; }
+.meta svg { width: 15px; height: 15px; stroke: var(--muted); fill: none; stroke-width: 2; flex: none; }
+.mono { font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+.desc { margin: 0; color: var(--muted); font-size: 14px; }
+.extra { margin: 0; font-size: 13px; font-weight: 600; color: var(--ink); }
+.foot { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.tag { font-size: 12px; padding: 2px 8px; border-radius: 6px; background: var(--chip); color: var(--ink); }
+.status { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+.status.open { background: color-mix(in srgb, var(--c-marche) 16%, transparent); color: var(--c-marche); }
+.status.soon { background: color-mix(in srgb, var(--c-concert) 14%, transparent); color: var(--c-concert); }
+.status.closed { background: var(--chip); color: var(--muted); }
+.src { margin-left: auto; font-size: 11px; color: var(--muted); }
+
+.empty { text-align: center; padding: 40px 12px; color: var(--muted); display: grid; gap: 10px; justify-items: center; }
+.empty strong { font-family: var(--font-display); font-size: 20px; color: var(--ink); }
+.empty button { padding: 8px 14px; border-radius: 999px; background: var(--ink); color: var(--bg); font-weight: 600; }
+.updated { text-align: center; font-size: 12px; color: var(--muted); }
+
+/* ---------- Feuilles (filtres, détail) ---------- */
+.scrim { position: fixed; inset: 0; background: rgba(10,12,15,.45); z-index: 40; }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 41; background: var(--surface); border-radius: 20px 20px 0 0; max-height: 88vh; overflow-y: auto; padding: 8px max(16px, env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); box-shadow: 0 -10px 40px rgba(0,0,0,.2); }
+@media (min-width: 760px) { .sheet { left: 50%; right: auto; width: 640px; transform: translateX(-50%); } }
+.grab { width: 40px; height: 5px; border-radius: 3px; background: var(--line); margin: 4px auto 12px; }
+.sheet h2 { margin: 0 0 4px; font-family: var(--font-display); font-weight: 800; font-size: 24px; line-height: 1.15; text-wrap: balance; }
+.field { display: grid; gap: 8px; padding-block: 12px; border-bottom: 1px solid var(--line); }
+.field > span { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button { padding: 8px 12px; border-radius: 10px; background: var(--chip); font-weight: 600; font-size: 14px; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.search { width: 100%; padding: 11px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font: inherit; }
+.sheet-actions { display: flex; gap: 8px; padding-top: 14px; }
+.btn { flex: 1; text-align: center; padding: 12px; border-radius: 12px; font-weight: 700; background: var(--chip); text-decoration: none; color: var(--ink); display: inline-flex; justify-content: center; align-items: center; gap: 6px; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.detail-grid { display: grid; gap: 10px; padding-block: 10px; }
+.detail-grid .meta { font-size: 15px; }
+.detail-grid p { margin: 0; }
+
+#map { height: 62vh; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--chip); }
+.map-note { font-size: 13px; color: var(--muted); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .sheet { animation: up .22s ease-out; }
+  @keyframes up { from { transform: translateY(24px); opacity: .6; } }
+  @media (min-width: 760px) { @keyframes up { from { transform: translate(-50%, 24px); opacity: .6; } } }
+}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="bar">
+      <div class="brand">
+        <small id="eyebrow">Liège · Luxembourg</small>
+        <h1 id="title">Aujourd'hui</h1>
+      </div>
+      <button class="icon-btn" id="btnMap" aria-pressed="false" aria-label="Carte">
+        <svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>
+      </button>
+      <button class="icon-btn" id="btnFav" aria-pressed="false" aria-label="Favoris">
+        <svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></svg>
+        <span class="dot" id="favCount" hidden>0</span>
+      </button>
+      <button class="icon-btn" id="btnFilters" aria-label="Filtres">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+        <span class="dot" id="filterCount" hidden>0</span>
+      </button>
+    </div>
+    <nav class="days" id="days" aria-label="Choisir un jour"></nav>
+    <div class="chips" id="chips" role="toolbar" aria-label="Catégories"></div>
+    <div class="active-filters" id="activeFilters" hidden></div>
+  </div>
+</header>
+
+<main class="wrap" id="main" aria-live="polite"></main>
+
+<div id="layer"></div>
+
+<script>
+(() => {
+'use strict';
+// ---------- Constantes ----------
+const HOME = { name: 'Fléron', lat: 50.615, lng: 5.684 };
+const CATS = [
+  ['noel', 'Noël'], ['brocante', 'Brocantes'], ['marche', 'Marchés'], ['soiree', 'Afterworks & soirées'],
+  ['concert', 'Concerts'], ['spectacle', 'Théâtre & spectacles'], ['fete', 'Fêtes & folklore'],
+  ['expo', 'Expos & culture'], ['balade', 'Balades & sport'], ['famille', 'En famille'],
+];
+const CAT_LABEL = Object.fromEntries(CATS);
+const CAT_SHORT = { noel: 'Noël', brocante: 'Brocante', marche: 'Marché', soiree: 'Soirée', concert: 'Concert', spectacle: 'Spectacle', fete: 'Fête', expo: 'Expo', balade: 'Balade', famille: 'Famille' };
+const ZONES = [['lg', 'Province de Liège'], ['lx', 'Province de Luxembourg'], ['de', 'Allemagne'], ['nl', 'Pays-Bas'], ['lu', 'Grand-Duché de Luxembourg'], ['fr', 'France']];
+const TAGS = { enfants: '👶 Enfants', interieur: '🏠 Intérieur', exterieur: '🌳 Extérieur', reservation: '🎟️ Réservation', accessible: '♿ Accessible' };
+const DAYS_FR = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
+const DAYS_LONG = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+const MONTHS_FR = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+const MONTHS_SHORT = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+const ICON = {
+  clock: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  pin: '<svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
+  car: '<svg viewBox="0 0 24 24"><path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="16" r="1"/><circle cx="16.5" cy="16" r="1"/></svg>',
+  cal: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  star: '<svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></svg>',
+};
+
+// ---------- Stockage local (protégé) ----------
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('sorties.' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('sorties.' + k, JSON.stringify(v)); } catch {} },
+};
+
+// ---------- Dates ----------
+const pad = (n) => String(n).padStart(2, '0');
+const isoOf = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const dateOf = (iso) => new Date(iso + 'T12:00:00');
+const addDays = (iso, n) => { const d = dateOf(iso); d.setDate(d.getDate() + n); return isoOf(d); };
+function todayIso() {
+  try { return new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Brussels' }); } catch { return isoOf(new Date()); }
+}
+const fmtShort = (iso) => { const d = dateOf(iso); return `${d.getDate()} ${MONTHS_SHORT[d.getMonth()]}`; };
+const fmtLong = (iso) => { const d = dateOf(iso); return `${DAYS_LONG[d.getDay()]} ${d.getDate()} ${MONTHS_FR[d.getMonth()]}`; };
+
+/** L'événement a-t-il lieu ce jour-là ? Gère les plages, jours de semaine et « 1er mardi du mois ». */
+function occursOn(e, iso) {
+  if (iso < e.d1 || iso > e.d2) return false;
+  const d = dateOf(iso);
+  const wd = d.getDay();
+  if (e.wdNth) { const [day, nth] = e.wdNth; return wd === day && Math.ceil(d.getDate() / 7) === nth; }
+  if (e.wd) { if (e.wdFrom && iso >= e.wdFrom) return true; return e.wd.includes(wd); }
+  return true;
+}
+/** Prochaine date d'ouverture à partir d'un jour donné (pour les marchés de Noël). */
+function nextOpen(e, fromIso) {
+  let iso = fromIso < e.d1 ? e.d1 : fromIso;
+  for (let i = 0; i < 400 && iso <= e.d2; i++, iso = addDays(iso, 1)) if (occursOn(e, iso)) return iso;
+  return null;
+}
+
+// ---------- Géographie ----------
+function km(a, b) {
+  const R = 6371, r = (x) => x * Math.PI / 180;
+  const dLat = r(b.lat - a.lat), dLng = r(b.lng - a.lng);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+/** Temps de route estimé : distance à vol d'oiseau × 1,3, à 75 km/h de moyenne, + 5 min. */
+function driveTime(k) {
+  const min = Math.round((k * 1.3) / 75 * 60 + 5);
+  if (min < 60) return `${min} min`;
+  return `${Math.floor(min / 60)}h${pad(Math.round(min % 60 / 5) * 5 % 60)}`;
+}
+
+// ---------- État ----------
+const TODAY = todayIso();
+let DATA = { events: [], generated: null, sources: [] };
+const state = {
+  day: TODAY,
+  cats: new Set(store.get('cats', [])),
+  prov: store.get('prov', 'both'),        // both | lg | lx
+  dist: store.get('dist', 0),            // 0 = tout
+  free: store.get('free', false),
+  moment: store.get('moment', 'all'),    // all | matin | aprem | soir
+  q: '',
+  view: 'list',                           // list | fav | map
+  favs: new Set(store.get('favs', [])),
+};
+const persist = () => {
+  store.set('cats', [...state.cats]); store.set('prov', state.prov); store.set('dist', state.dist);
+  store.set('free', state.free); store.set('moment', state.moment); store.set('favs', [...state.favs]);
+};
+const noelOnly = () => state.cats.size === 1 && state.cats.has('noel');
+
+// ---------- Filtres ----------
+function momentOf(e) {
+  if (!e.tm) return 'jour';
+  const h = +e.tm.slice(0, 2);
+  return h < 12 ? 'matin' : h < 18 ? 'aprem' : 'soir';
+}
+function passes(e, { ignoreDay = false } = {}) {
+  if (!ignoreDay && !occursOn(e, state.day)) return false;
+  if (state.cats.size && !state.cats.has(e.c) && !(state.cats.has('famille') && e.tags.includes('enfants'))) return false;
+  const abroad = !['lg', 'lx'].includes(e.prov);
+  if (state.prov !== 'both' && !abroad && e.prov !== state.prov) return false;
+  // Hors des deux provinces (Allemagne, France…) : uniquement dans la catégorie Noël.
+  if (abroad && !state.cats.has('noel')) return false;
+  if (state.dist && e.km > state.dist && !noelOnly()) return false;
+  if (state.free && e.free !== true) return false;
+  if (state.moment !== 'all') { const m = momentOf(e); if (m !== 'jour' && m !== state.moment) return false; }
+  if (state.q) {
+    const hay = (e.t + ' ' + e.town + ' ' + (e.desc || '') + ' ' + (e.x || '') + ' ' + CAT_LABEL[e.c]).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const q = state.q.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    if (!q.split(/\s+/).every((w) => hay.includes(w))) return false;
+  }
+  return true;
+}
+function activeFilterCount() {
+  return (state.prov !== 'both') + (state.dist > 0) + state.free + (state.moment !== 'all');
+}
+
+// ---------- Rendu ----------
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function renderDays() {
+  const nav = $('#days');
+  const start = TODAY;
+  let html = '';
+  for (let i = 0; i < 21; i++) {
+    const iso = addDays(start, i);
+    const d = dateOf(iso);
+    const n = DATA.events.filter((e) => occursOn(e, iso) && passes(e, { ignoreDay: true })).length;
+    const we = d.getDay() === 0 || d.getDay() === 6;
+    const label = i === 0 ? 'auj.' : i === 1 ? 'dem.' : DAYS_FR[d.getDay()];
+    html += `<button class="day${we ? ' we' : ''}" data-day="${iso}" ${iso === state.day ? 'aria-current="date"' : ''} aria-label="${fmtLong(iso)}, ${n} sorties">
+      <span class="dn">${label}</span><span class="dd">${d.getDate()}</span><span class="dc">${n}</span></button>`;
+  }
+  html += `<label class="day cal" aria-label="Choisir une autre date">${ICON.cal}<input type="date" id="pickDate" min="${TODAY}" value="${state.day}"></label>`;
+  nav.innerHTML = html;
+  const cur = nav.querySelector('[aria-current]');
+  if (cur) cur.scrollIntoView({ inline: 'nearest', block: 'nearest' });
+}
+
+function renderChips() {
+  const el = $('#chips');
+  el.innerHTML = `<button class="chip all" data-cat="" aria-pressed="${state.cats.size === 0}">Tout</button>` +
+    CATS.map(([k, l]) => `<button class="chip" data-cat="${k}" style="--cc:var(--c-${k})" aria-pressed="${state.cats.has(k)}"><i></i>${l}</button>`).join('');
+}
+
+function renderActiveFilters() {
+  const parts = [];
+  if (state.prov !== 'both') parts.push(['prov', state.prov === 'lg' ? 'Province de Liège' : 'Province de Luxembourg']);
+  if (state.dist) parts.push(['dist', `≤ ${state.dist} km de ${HOME.name}`]);
+  if (state.free) parts.push(['free', 'Gratuit']);
+  if (state.moment !== 'all') parts.push(['moment', { matin: 'Matin', aprem: 'Après-midi', soir: 'Soirée' }[state.moment]]);
+  if (state.q) parts.push(['q', `« ${state.q} »`]);
+  const box = $('#activeFilters');
+  box.hidden = parts.length === 0;
+  box.innerHTML = parts.length ? 'Filtres :' + parts.map(([k, l]) => `<button data-clear="${k}" aria-label="Retirer le filtre ${esc(l)}">${esc(l)} ✕</button>`).join('') : '';
+  const fc = $('#filterCount'); const n = activeFilterCount() + (state.q ? 1 : 0);
+  fc.hidden = n === 0; fc.textContent = n;
+  const fv = $('#favCount'); fv.hidden = state.favs.size === 0; fv.textContent = state.favs.size;
+}
+
+function priceHtml(e) {
+  if (e.free === true) return '<span class="price free">Gratuit</span>';
+  if (e.price) return `<span class="price">${esc(e.price)}</span>`;
+  if (e.free === false) return '<span class="price">Payant</span>';
+  return '';
+}
+function hoursText(e) {
+  if (e.h) return e.h;
+  if (e.c === 'noel') return 'Horaires sur le site';
+  return 'Horaire à vérifier';
+}
+function placeHtml(e) {
+  const far = e.km > 40;
+  return `<span>${ICON.pin}${esc(e.town)} · <span class="mono">${Math.round(e.km)} km</span></span>` +
+    (far ? `<span>${ICON.car}<span class="mono">≈ ${driveTime(e.km)}</span></span>` : '');
+}
+function datesText(e) {
+  if (e.d1 === e.d2) return null;
+  if (e.wdNth) return 'Le 1er ' + DAYS_LONG[e.wdNth[0]] + ' du mois';
+  if (e.wd && !e.wdFrom && e.d2 > addDays(TODAY, 300)) return 'Chaque ' + e.wd.map((d) => DAYS_LONG[d]).join(' et ');
+  let s = e.d1 <= TODAY ? `Jusqu'au ${fmtShort(e.d2)}` : `Du ${fmtShort(e.d1)} au ${fmtShort(e.d2)}`;
+  if (e.wd && !e.wdFrom) s += ' · ' + e.wd.map((d) => DAYS_FR[d].replace('.', '')).join(', ');
+  if (e.wd && e.wdFrom) s += ` · week-ends, puis tous les jours dès le ${fmtShort(e.wdFrom)}`;
+  return s;
+}
+function noelStatus(e) {
+  if (occursOn(e, state.day)) return `<span class="status open">${state.day === TODAY ? "Ouvert aujourd'hui" : 'Ouvert ce jour'}</span>`;
+  const n = nextOpen(e, state.day);
+  if (!n) return '<span class="status closed">Terminé</span>';
+  return `<span class="status ${n > state.day ? 'soon' : 'closed'}">Ouvre le ${fmtShort(n)}</span>`;
+}
+
+function card(e, { noel = false } = {}) {
+  const fav = state.favs.has(e.id);
+  const range = datesText(e);
+  const tags = (e.tags || []).filter((t) => TAGS[t]).map((t) => `<span class="tag">${TAGS[t]}</span>`).join('');
+  return `<article class="card" style="--cc:var(--c-${e.c})" data-id="${e.id}" tabindex="0" role="button" aria-label="${esc(e.t)}">
+    <div class="row1"><span class="cat">${CAT_SHORT[e.c]}</span>${priceHtml(e)}${e.unconfirmed ? '<span class="price">Dates à confirmer</span>' : ''}
+      <button class="star" data-fav="${e.id}" aria-pressed="${fav}" aria-label="${fav ? 'Retirer des' : 'Ajouter aux'} favoris">${ICON.star}</button></div>
+    <h4>${esc(e.t)}</h4>
+    <div class="meta"><span>${ICON.clock}<span class="mono">${esc(hoursText(e))}</span></span>${placeHtml(e)}</div>
+    ${range ? `<div class="meta"><span>${ICON.cal}${esc(range)}</span></div>` : ''}
+    ${e.desc ? `<p class="desc">${esc(e.desc)}</p>` : ''}
+    ${e.x ? `<p class="extra">${esc(e.x)}</p>` : ''}
+    <div class="foot">${noel ? noelStatus(e) : ''}${tags}<span class="src">${esc(e.src.join(' · '))}</span></div>
+  </article>`;
+}
+
+function dayHead(n) {
+  const isToday = state.day === TODAY;
+  $('#title').textContent = isToday ? "Aujourd'hui" : state.day === addDays(TODAY, 1) ? 'Demain' : fmtLong(state.day).replace(/^./, (c) => c.toUpperCase());
+  $('#eyebrow').textContent = isToday ? fmtLong(TODAY) : 'Liège · Luxembourg';
+  return n;
+}
+
+function renderList() {
+  if (noelOnly()) return renderNoel();
+  const list = DATA.events.filter((e) => passes(e)).sort((a, b) => (a.tm || '99').localeCompare(b.tm || '99') || a.km - b.km);
+  dayHead();
+  const isMulti = (e) => e.d1 !== e.d2 && !(e.wd || e.wdNth) || (e.c === 'noel') || (e.c === 'expo' && e.d1 !== e.d2);
+  const ongoing = list.filter(isMulti).sort((a, b) => a.km - b.km);
+  const single = list.filter((e) => !isMulti(e));
+  const groups = [['matin', 'Matin'], ['aprem', 'Après-midi'], ['soir', 'Soirée'], ['jour', 'Toute la journée · horaire à vérifier']];
+  let html = `<div class="dayhead"><h2>${single.length + ongoing.length ? `${single.length + ongoing.length} sortie${single.length + ongoing.length > 1 ? 's' : ''}` : 'Rien de prévu'}</h2><span>${fmtLong(state.day)}</span></div>`;
+  if (!list.length) {
+    html += `<div class="empty"><strong>Aucune sortie avec ces filtres</strong><span>Essayez un autre jour ou élargissez les filtres.</span>${activeFilterCount() || state.cats.size || state.q ? '<button data-reset>Tout afficher</button>' : ''}</div>`;
+  }
+  for (const [k, label] of groups) {
+    const g = single.filter((e) => momentOf(e) === k);
+    if (g.length) html += `<section class="group"><h3>${label}</h3><div class="cards">${g.map((e) => card(e)).join('')}</div></section>`;
+  }
+  if (ongoing.length) {
+    const open = store.get('ongoingOpen', single.length < 4);
+    html += `<details class="group" id="ongoing" ${open ? 'open' : ''}><summary><span class="tw">▸</span> En cours ce jour · marchés, expos, spectacles (${ongoing.length})</summary><div class="cards">${ongoing.map((e) => card(e, { noel: e.c === 'noel' })).join('')}</div></details>`;
+  }
+  html += updatedHtml();
+  $('#main').innerHTML = html;
+}
+
+function renderNoel() {
+  dayHead();
+  $('#eyebrow').textContent = 'Marchés de Noël · de Cologne à Strasbourg';
+  const list = DATA.events.filter((e) => e.c === 'noel' && e.d2 >= state.day && passes(e, { ignoreDay: true })).sort((a, b) => a.km - b.km);
+  const openNow = list.filter((e) => occursOn(e, state.day)).length;
+  let html = `<div class="dayhead"><h2>${openNow} marché${openNow > 1 ? 's' : ''} ouvert${openNow > 1 ? 's' : ''}</h2><span>${fmtLong(state.day)}</span></div>`;
+  for (const [z, label] of ZONES) {
+    if (state.prov !== 'both' && ['lg', 'lx'].includes(z) && z !== state.prov) continue;
+    const g = list.filter((e) => e.prov === z);
+    if (!g.length) continue;
+    g.sort((a, b) => (occursOn(b, state.day) - occursOn(a, state.day)) || a.km - b.km);
+    html += `<section class="group"><h3>${label}</h3><div class="cards">${g.map((e) => card(e, { noel: true })).join('')}</div></section>`;
+  }
+  if (!list.length) html += '<div class="empty"><strong>Aucun marché de Noël</strong><span>La saison va de mi-novembre à début janvier.</span></div>';
+  html += updatedHtml();
+  $('#main').innerHTML = html;
+}
+
+function renderFavs() {
+  $('#title').textContent = 'Mes favoris';
+  $('#eyebrow').textContent = 'À planifier';
+  const list = DATA.events.filter((e) => state.favs.has(e.id) && e.d2 >= TODAY).sort((a, b) => (nextOpen(a, TODAY) || a.d1).localeCompare(nextOpen(b, TODAY) || b.d1));
+  let html = `<div class="dayhead"><h2>${list.length} favori${list.length > 1 ? 's' : ''}</h2><span>à venir</span></div>`;
+  if (!list.length) html += `<div class="empty"><strong>Pas encore de favori</strong><span>Touchez l'étoile d'une sortie pour la garder ici.</span><button data-view="list">Voir les sorties</button></div>`;
+  const byDay = {};
+  for (const e of list) { const d = nextOpen(e, TODAY) || e.d1; (byDay[d] ||= []).push(e); }
+  for (const [d, evs] of Object.entries(byDay)) html += `<section class="group"><h3>${fmtLong(d)}</h3><div class="cards">${evs.map((e) => card(e, { noel: e.c === 'noel' })).join('')}</div></section>`;
+  $('#main').innerHTML = html;
+}
+
+let map = null;
+function renderMap() {
+  dayHead();
+  const list = DATA.events.filter((e) => noelOnly() ? e.c === 'noel' && occursOn(e, state.day) && passes(e, { ignoreDay: true }) : passes(e));
+  $('#main').innerHTML = `<div class="dayhead"><h2>${list.length} sur la carte</h2><span>${fmtLong(state.day)}</span></div><div id="map" role="region" aria-label="Carte des sorties"></div><p class="map-note" id="mapNote">Touchez un point pour voir la sortie.</p>`;
+  if (!window.L) {
+    $('#mapNote').textContent = 'La carte n’a pas pu se charger. Elle a besoin d’une connexion internet.';
+    return;
+  }
+  map = L.map('map', { zoomControl: true, attributionControl: true }).setView([HOME.lat, HOME.lng], 9);
+  const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© OpenStreetMap' }).addTo(map);
+  let tileErr = 0;
+  tiles.on('tileerror', () => { if (++tileErr === 3) $('#mapNote').textContent = 'Le fond de carte ne s’affiche que dans la version installée de l’appli.'; });
+  L.circleMarker([HOME.lat, HOME.lng], { radius: 7, color: '#15191f', fillColor: '#ffffff', fillOpacity: 1, weight: 3 }).addTo(map).bindTooltip(HOME.name);
+  const color = (c) => getComputedStyle(document.documentElement).getPropertyValue('--c-' + c).trim();
+  const pts = [];
+  for (const e of list) {
+    const m = L.circleMarker([e.lat, e.lng], { radius: 8, color: '#fff', weight: 2, fillColor: color(e.c), fillOpacity: 1 }).addTo(map);
+    m.on('click', () => openDetail(e.id));
+    m.bindTooltip(e.t);
+    pts.push([e.lat, e.lng]);
+  }
+  if (pts.length) map.fitBounds([...pts, [HOME.lat, HOME.lng]], { padding: [30, 30], maxZoom: 12 });
+}
+
+function updatedHtml() {
+  if (!DATA.generated) return '';
+  const d = new Date(DATA.generated);
+  const ok = (DATA.sources || []).filter((s) => s.ok).length;
+  const total = (DATA.sources || []).length;
+  return `<p class="updated">Mis à jour le ${d.toLocaleDateString('fr-BE', { day: 'numeric', month: 'long' })} à ${d.toLocaleTimeString('fr-BE', { hour: '2-digit', minute: '2-digit' })}${total ? ` · ${ok}/${total} sources lues` : ''}</p>`;
+}
+
+function render() {
+  for (const e of DATA.events) e.km ??= km(HOME, e);
+  renderChips(); renderDays(); renderActiveFilters();
+  $('#btnFav').setAttribute('aria-pressed', state.view === 'fav');
+  $('#btnMap').setAttribute('aria-pressed', state.view === 'map');
+  if (map) { map.remove(); map = null; }
+  if (state.view === 'fav') renderFavs();
+  else if (state.view === 'map') renderMap();
+  else renderList();
+}
+
+// ---------- Feuilles ----------
+function closeLayer() { $('#layer').innerHTML = ''; document.body.style.overflow = ''; }
+function openLayer(html) {
+  $('#layer').innerHTML = `<div class="scrim" data-close></div><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${html}</div>`;
+  document.body.style.overflow = 'hidden';
+  const f = $('#layer .sheet button, #layer .sheet input, #layer .sheet a'); if (f) f.focus({ preventScroll: true });
+}
+
+function openFilters() {
+  const seg = (name, cur, opts) => `<div class="seg">${opts.map(([v, l]) => `<button data-set="${name}" data-val="${v}" aria-pressed="${String(cur) === String(v)}">${l}</button>`).join('')}</div>`;
+  openLayer(`<h2>Filtres</h2>
+    <label class="field"><span>Rechercher</span><input class="search" id="q" type="search" placeholder="Ville, mot-clé : Spa, vin chaud…" value="${esc(state.q)}" autocomplete="off"></label>
+    <div class="field"><span>Province</span>${seg('prov', state.prov, [['both', 'Les deux'], ['lg', 'Liège'], ['lx', 'Luxembourg']])}</div>
+    <div class="field"><span>Distance depuis ${HOME.name}</span>${seg('dist', state.dist, [[10, '10 km'], [25, '25 km'], [50, '50 km'], [0, 'Tout']])}</div>
+    <div class="field"><span>Moment de la journée</span>${seg('moment', state.moment, [['all', 'Tous'], ['matin', 'Matin'], ['aprem', 'Après-midi'], ['soir', 'Soirée']])}</div>
+    <div class="field"><span>Prix</span>${seg('free', state.free, [[false, 'Tous'], [true, 'Gratuit uniquement']])}</div>
+    <div class="sheet-actions"><button class="btn" data-reset>Réinitialiser</button><button class="btn primary" data-close>Voir les sorties</button></div>`);
+  $('#q').addEventListener('input', (ev) => { state.q = ev.target.value.trim(); render(); });
+}
+
+function openDetail(id) {
+  const e = DATA.events.find((x) => x.id === id);
+  if (!e) return;
+  const fav = state.favs.has(e.id);
+  const range = datesText(e);
+  const next = nextOpen(e, state.day);
+  const apple = `https://maps.apple.com/?daddr=${e.lat},${e.lng}&q=${encodeURIComponent(e.t)}`;
+  const google = `https://www.google.com/maps/dir/?api=1&destination=${e.lat},${e.lng}`;
+  const tags = (e.tags || []).filter((t) => TAGS[t]).map((t) => `<span class="tag">${TAGS[t]}</span>`).join('');
+  openLayer(`<div class="row1" style="--cc:var(--c-${e.c});display:flex;gap:8px;align-items:center"><span class="cat">${CAT_LABEL[e.c]}</span>${priceHtml(e)}${e.unconfirmed ? '<span class="price">Dates à confirmer</span>' : ''}</div>
+    <h2>${esc(e.t)}</h2>
+    <div class="detail-grid">
+      <div class="meta"><span>${ICON.cal}${esc(range || fmtLong(next || e.d1))}</span></div>
+      <div class="meta"><span>${ICON.clock}<span class="mono">${esc(hoursText(e))}</span></span></div>
+      <div class="meta"><span>${ICON.pin}${esc(e.town)} · <span class="mono">${Math.round(e.km)} km de ${HOME.name}</span></span><span>${ICON.car}<span class="mono">≈ ${driveTime(e.km)} en voiture</span></span></div>
+      ${e.desc ? `<p>${esc(e.desc)}</p>` : ''}
+      ${e.x ? `<p class="extra">${esc(e.x)}</p>` : ''}
+      ${tags ? `<div class="foot">${tags}</div>` : ''}
+      <p class="desc">Source : ${esc(e.src.join(', '))}. Vérifiez les détails sur la page d'origine avant de partir.</p>
+    </div>
+    <div class="sheet-actions"><a class="btn primary" href="${apple}" target="_blank" rel="noopener">Itinéraire Plans</a><a class="btn" href="${google}" target="_blank" rel="noopener">Google Maps</a></div>
+    <div class="sheet-actions">${e.url ? `<a class="btn" href="${esc(e.url)}" target="_blank" rel="noopener">Page d'origine ↗</a>` : ''}<button class="btn" data-fav="${e.id}" aria-pressed="${fav}">${fav ? '★ Dans mes favoris' : '☆ Ajouter aux favoris'}</button></div>`);
+}
+
+// ---------- Événements ----------
+document.addEventListener('click', (ev) => {
+  const t = ev.target.closest('button, [data-close], .card, a');
+  if (!t) return;
+  if (t.matches('a')) return;
+  if (t.dataset.fav) {
+    ev.stopPropagation();
+    const id = t.dataset.fav;
+    state.favs.has(id) ? state.favs.delete(id) : state.favs.add(id);
+    persist();
+    const inSheet = t.closest('.sheet');
+    render();
+    if (inSheet) openDetail(id);
+    return;
+  }
+  if (t.dataset.day) { state.day = t.dataset.day; state.view = state.view === 'fav' ? 'list' : state.view; render(); window.scrollTo({ top: 0 }); return; }
+  if (t.dataset.cat !== undefined && t.classList.contains('chip')) {
+    const c = t.dataset.cat;
+    if (!c) state.cats.clear(); else state.cats.has(c) ? state.cats.delete(c) : state.cats.add(c);
+    if (state.view === 'fav') state.view = 'list';
+    persist(); render(); return;
+  }
+  if (t.dataset.set) {
+    let v = t.dataset.val;
+    if (t.dataset.set === 'dist') v = +v;
+    if (t.dataset.set === 'free') v = v === 'true';
+    state[t.dataset.set] = v; persist(); render();
+    t.parentElement.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b === t));
+    return;
+  }
+  if (t.dataset.clear) {
+    const k = t.dataset.clear;
+    if (k === 'prov') state.prov = 'both'; if (k === 'dist') state.dist = 0; if (k === 'free') state.free = false;
+    if (k === 'moment') state.moment = 'all'; if (k === 'q') state.q = '';
+    persist(); render(); return;
+  }
+  if (t.hasAttribute('data-reset')) {
+    state.prov = 'both'; state.dist = 0; state.free = false; state.moment = 'all'; state.q = ''; state.cats.clear();
+    persist(); closeLayer(); render(); return;
+  }
+  if (t.dataset.view) { state.view = t.dataset.view; render(); return; }
+  if (t.hasAttribute('data-close')) { closeLayer(); return; }
+  if (t.id === 'btnFilters') return openFilters();
+  if (t.id === 'btnFav') { state.view = state.view === 'fav' ? 'list' : 'fav'; render(); return; }
+  if (t.id === 'btnMap') { state.view = state.view === 'map' ? 'list' : 'map'; ensureLeaflet().then(render); return; }
+  if (t.classList.contains('card')) openDetail(t.dataset.id);
+});
+document.addEventListener('keydown', (ev) => {
+  if (ev.key === 'Escape') closeLayer();
+  if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.classList?.contains('card')) { ev.preventDefault(); openDetail(ev.target.dataset.id); }
+});
+document.addEventListener('change', (ev) => {
+  if (ev.target.id === 'pickDate' && ev.target.value) { state.day = ev.target.value < TODAY ? TODAY : ev.target.value; if (state.view === 'fav') state.view = 'list'; render(); }
+});
+document.addEventListener('toggle', (ev) => { if (ev.target.id === 'ongoing') store.set('ongoingOpen', ev.target.open); }, true);
+
+// Carte : Leaflet chargé seulement quand on ouvre la carte.
+let leafletP = null;
+function ensureLeaflet() {
+  if (window.L) return Promise.resolve();
+  if (!leafletP) leafletP = new Promise((res) => {
+    const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'; document.head.appendChild(css);
+    const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'; s.onload = res; s.onerror = res; document.head.appendChild(s);
+  });
+  return leafletP;
+}
+
+// ---------- Chargement ----------
+async function load() {
+  $('#main').innerHTML = '<div class="empty"><strong>Chargement des sorties…</strong></div>';
+  try {
+    const res = await fetch('data/events.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error(res.status);
+    DATA = await res.json();
+  } catch (err) {
+    $('#main').innerHTML = '<div class="empty"><strong>Impossible de charger l’agenda</strong><span>Vérifiez la connexion internet puis rouvrez l’appli.</span></div>';
+    return;
+  }
+  // Les favoris d'événements passés sont nettoyés.
+  const ids = new Set(DATA.events.map((e) => e.id));
+  for (const id of [...state.favs]) if (!ids.has(id)) state.favs.delete(id);
+  persist();
+  render();
+}
+load();
+try { if ('serviceWorker' in navigator && location.protocol === 'https:' && !/claude|anthropic/.test(location.hostname)) navigator.serviceWorker.register('sw.js'); } catch {}
+})();
+</script>
