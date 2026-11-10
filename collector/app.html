@@ -22,7 +22,7 @@
   --chip: #e9ebe7;
   --c-brocante: #a0631c; --c-marche: #2f7d4a; --c-noel: #c8102e; --c-soiree: #7a3fb0;
   --c-concert: #1f6fb2; --c-spectacle: #b5397a; --c-fete: #d9822b; --c-expo: #3d6b73;
-  --c-balade: #4f7f1f; --c-famille: #c2a000;
+  --c-balade: #4f7f1f; --c-famille: #c2a000; --c-salle: #4a3f9f;
   --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
   --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -35,7 +35,7 @@
     --accent: #ff4d5e; --accent-ink: #15191f; --chip: #242a31;
     --c-brocante: #e09a4a; --c-marche: #5cc07d; --c-noel: #ff5a6e; --c-soiree: #b58af0;
     --c-concert: #5fa8ec; --c-spectacle: #ee7ab4; --c-fete: #f2a65a; --c-expo: #7fb3bb;
-    --c-balade: #94c95a; --c-famille: #e8cc3a;
+    --c-balade: #94c95a; --c-famille: #e8cc3a; --c-salle: #9b92e8;
     --shadow: 0 1px 2px rgba(0,0,0,.4);
     color-scheme: dark;
   }
@@ -45,7 +45,7 @@
   --accent: #ff4d5e; --accent-ink: #15191f; --chip: #242a31;
   --c-brocante: #e09a4a; --c-marche: #5cc07d; --c-noel: #ff5a6e; --c-soiree: #b58af0;
   --c-concert: #5fa8ec; --c-spectacle: #ee7ab4; --c-fete: #f2a65a; --c-expo: #7fb3bb;
-  --c-balade: #94c95a; --c-famille: #e8cc3a;
+  --c-balade: #94c95a; --c-famille: #e8cc3a; --c-salle: #9b92e8;
   --shadow: 0 1px 2px rgba(0,0,0,.4);
   color-scheme: dark;
 }
@@ -204,9 +204,10 @@ const CATS = [
   ['noel', 'Noël'], ['brocante', 'Brocantes'], ['marche', 'Marchés'], ['soiree', 'Afterworks & soirées'],
   ['concert', 'Concerts'], ['spectacle', 'Théâtre & spectacles'], ['fete', 'Fêtes & folklore'],
   ['expo', 'Expos & culture'], ['balade', 'Balades & sport'], ['famille', 'En famille'],
+  ['salle', 'Grandes salles de concert'],
 ];
 const CAT_LABEL = Object.fromEntries(CATS);
-const CAT_SHORT = { noel: 'Noël', brocante: 'Brocante', marche: 'Marché', soiree: 'Soirée', concert: 'Concert', spectacle: 'Spectacle', fete: 'Fête', expo: 'Expo', balade: 'Balade', famille: 'Famille' };
+const CAT_SHORT = { noel: 'Noël', brocante: 'Brocante', marche: 'Marché', soiree: 'Soirée', concert: 'Concert', spectacle: 'Spectacle', fete: 'Fête', expo: 'Expo', balade: 'Balade', famille: 'Famille', salle: 'Grande salle' };
 const ZONES = [['lg', 'Province de Liège'], ['lx', 'Province de Luxembourg'], ['de', 'Allemagne'], ['nl', 'Pays-Bas'], ['lu', 'Grand-Duché de Luxembourg'], ['fr', 'France']];
 const TAGS = { enfants: '👶 Enfants', interieur: '🏠 Intérieur', exterieur: '🌳 Extérieur', reservation: '🎟️ Réservation', accessible: '♿ Accessible' };
 const DAYS_FR = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
@@ -287,6 +288,7 @@ const persist = () => {
   store.set('free', state.free); store.set('moment', state.moment); store.set('favs', [...state.favs]);
 };
 const noelOnly = () => state.cats.size === 1 && state.cats.has('noel');
+const salleOnly = () => state.cats.size === 1 && state.cats.has('salle');
 
 // ---------- Filtres ----------
 function momentOf(e) {
@@ -299,9 +301,9 @@ function passes(e, { ignoreDay = false } = {}) {
   if (state.cats.size && !state.cats.has(e.c) && !(state.cats.has('famille') && e.tags.includes('enfants'))) return false;
   const abroad = !['lg', 'lx'].includes(e.prov);
   if (state.prov !== 'both' && !abroad && e.prov !== state.prov) return false;
-  // Hors des deux provinces (Allemagne, France…) : uniquement dans la catégorie Noël.
-  if (abroad && !state.cats.has('noel')) return false;
-  if (state.dist && e.km > state.dist && !noelOnly()) return false;
+  // Hors des deux provinces (Allemagne, France, reste de la Belgique…) : uniquement Noël et les grandes salles.
+  if (abroad && !state.cats.has('noel') && !state.cats.has('salle')) return false;
+  if (state.dist && e.km > state.dist && !noelOnly() && !salleOnly()) return false;
   if (state.free && e.free !== true) return false;
   if (state.moment !== 'all') { const m = momentOf(e); if (m !== 'jour' && m !== state.moment) return false; }
   if (state.q) {
@@ -416,6 +418,7 @@ function dayHead(n) {
 
 function renderList() {
   if (noelOnly()) return renderNoel();
+  if (salleOnly()) return renderSalles();
   const list = DATA.events.filter((e) => passes(e)).sort((a, b) => (a.tm || '99').localeCompare(b.tm || '99') || a.km - b.km);
   dayHead();
   const isMulti = (e) => e.d1 !== e.d2 && !(e.wd || e.wdNth) || (e.c === 'noel') || (e.c === 'expo' && e.d1 !== e.d2);
@@ -452,6 +455,28 @@ function renderNoel() {
     html += `<section class="group"><h3>${label}</h3><div class="cards">${g.map((e) => card(e, { noel: true })).join('')}</div></section>`;
   }
   if (!list.length) html += '<div class="empty"><strong>Aucun marché de Noël</strong><span>La saison va de mi-novembre à début janvier.</span></div>';
+  html += updatedHtml();
+  $('#main').innerHTML = html;
+}
+
+function renderSalles() {
+  dayHead();
+  $('#eyebrow').textContent = 'Grandes salles de concert · partout en Belgique';
+  const list = DATA.events.filter((e) => e.c === 'salle' && e.d2 >= TODAY && passes(e, { ignoreDay: true }))
+    .sort((a, b) => a.d1.localeCompare(b.d1) || (a.tm || '99').localeCompare(b.tm || '99'));
+  let html = `<div class="dayhead"><h2>${list.length} concert${list.length > 1 ? 's' : ''} à l'affiche</h2><span>classés par salle</span></div>`;
+  const byVenue = new Map();
+  for (const e of list) {
+    const key = e.v || e.town;
+    if (!byVenue.has(key)) byVenue.set(key, []);
+    byVenue.get(key).push(e);
+  }
+  const venues = [...byVenue.entries()].sort((a, b) => Math.min(...a[1].map((e) => e.km)) - Math.min(...b[1].map((e) => e.km)));
+  for (const [venue, evs] of venues) {
+    const km = Math.round(Math.min(...evs.map((e) => e.km)));
+    html += `<section class="group"><h3>${esc(venue)} <span class="mono" style="font-weight:500;color:var(--muted)">· ${km} km</span></h3><div class="cards">${evs.map((e) => card(e)).join('')}</div></section>`;
+  }
+  if (!list.length) html += '<div class="empty"><strong>Rien de programmé pour l’instant</strong><span>Revenez plus tard.</span></div>';
   html += updatedHtml();
   $('#main').innerHTML = html;
 }

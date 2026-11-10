@@ -1,1 +1,362 @@
-{}
+{
+ "|hannut": {
+  "lat": 50.6725,
+  "lng": 5.078,
+  "town": "Hannut",
+  "prov": "lg"
+ },
+ "|stavelot": {
+  "lat": 50.3942,
+  "lng": 5.931,
+  "town": "Stavelot",
+  "prov": "lg"
+ },
+ "|aubel": {
+  "lat": 50.7041,
+  "lng": 5.8586,
+  "town": "Aubel",
+  "prov": "lg"
+ },
+ "|hermalle-sous-huy": {
+  "lat": 50.557,
+  "lng": 5.3623,
+  "town": "Hermalle-sous-Huy",
+  "prov": "lg"
+ },
+ "|heure-le-romain": {
+  "lat": 50.7317,
+  "lng": 5.6296,
+  "town": "Heure-le-Romain",
+  "prov": "lg"
+ },
+ "|retinne": {
+  "lat": 50.6305,
+  "lng": 5.6977,
+  "town": "Retinne",
+  "prov": "lg"
+ },
+ "|braives": {
+  "lat": 50.6301,
+  "lng": 5.1435,
+  "town": "Braives",
+  "prov": "lg"
+ },
+ "|liège": {
+  "lat": 50.6451,
+  "lng": 5.5736,
+  "town": "Liège",
+  "prov": "lg"
+ },
+ "|flémalle": {
+  "lat": 50.5994,
+  "lng": 5.47,
+  "town": "Flémalle",
+  "prov": "lg"
+ },
+ "|neufchâteau": {
+  "lat": 49.8408,
+  "lng": 5.4351,
+  "town": "Neufchâteau",
+  "prov": "lx"
+ },
+ "|awans": {
+  "lat": 50.667,
+  "lng": 5.4622,
+  "town": "Awans",
+  "prov": "lg"
+ },
+ "|saint-nicolas": {
+  "lat": 51.1687,
+  "lng": 4.1019,
+  "town": "Sint-Niklaas",
+  "prov": "autre"
+ },
+ "|verviers": {
+  "lat": 50.5932,
+  "lng": 5.8678,
+  "town": "Verviers",
+  "prov": "lg"
+ },
+ "|cornesse": {
+  "lat": 50.5747,
+  "lng": 5.7911,
+  "town": "Cornesse",
+  "prov": "lg"
+ },
+ "|poulseur": {
+  "lat": 50.5092,
+  "lng": 5.5788,
+  "town": "Poulseur",
+  "prov": "lg"
+ },
+ "|ville-en-hesbaye": {
+  "lat": 50.6104,
+  "lng": 5.1176,
+  "town": "Braives",
+  "prov": "lg"
+ },
+ "|saint-andré": {
+  "lat": 50.6953,
+  "lng": 5.7536,
+  "town": "Saint-André",
+  "prov": "lg"
+ },
+ "|spa": {
+  "lat": 50.4921,
+  "lng": 5.8628,
+  "town": "Spa",
+  "prov": "lg"
+ },
+ "|geer": {
+  "lat": 50.6685,
+  "lng": 5.1711,
+  "town": "Geer",
+  "prov": "lg"
+ },
+ "|hamoir": {
+  "lat": 50.436,
+  "lng": 5.547,
+  "town": "Hamoir",
+  "prov": "lg"
+ },
+ "|bombaye": {
+  "lat": 50.7302,
+  "lng": 5.7429,
+  "town": "Bombaye",
+  "prov": "lg"
+ },
+ "|ougrée": {
+  "lat": 50.5911,
+  "lng": 5.544,
+  "town": "Ougrée",
+  "prov": "lg"
+ },
+ "2026|": {
+  "lat": 50.8417,
+  "lng": 4.3582,
+  "town": "Bruxelles - Brussel",
+  "prov": "autre"
+ },
+ "2027|": {
+  "lat": 50.8417,
+  "lng": 4.3582,
+  "town": "Bruxelles - Brussel",
+  "prov": "autre"
+ },
+ "3966|": {
+  "lat": 50.8417,
+  "lng": 4.3582,
+  "town": "Bruxelles - Brussel",
+  "prov": "autre"
+ },
+ "6997|erezée": {
+  "lat": 50.2966,
+  "lng": 5.5578,
+  "town": "Érezée",
+  "prov": "lx"
+ },
+ "4620|fléron": {
+  "lat": 50.6183,
+  "lng": 5.6831,
+  "town": "Fléron",
+  "prov": "lg"
+ },
+ "4537|verlaine": {
+  "lat": 50.6088,
+  "lng": 5.3023,
+  "town": "Verlaine",
+  "prov": "lg"
+ },
+ "5310|saint-germain": {
+  "lat": 50.5728,
+  "lng": 4.8422,
+  "town": "Saint-Germain",
+  "prov": "autre"
+ },
+ "4000|liège": {
+  "lat": 50.6366,
+  "lng": 5.5655,
+  "town": "Liège",
+  "prov": "lg"
+ },
+ "6941|bomal": {
+  "lat": 50.3807,
+  "lng": 5.5117,
+  "town": "Bomal",
+  "prov": "lx"
+ },
+ "4654|charneux": {
+  "lat": 50.6762,
+  "lng": 5.8076,
+  "town": "Charneux",
+  "prov": "lg"
+ },
+ "4651|battice": {
+  "lat": 50.6479,
+  "lng": 5.8196,
+  "town": "Battice",
+  "prov": "lg"
+ },
+ "4633|melen": {
+  "lat": 50.6435,
+  "lng": 5.7454,
+  "town": "Melen",
+  "prov": "lg"
+ },
+ "4841|henri-chapelle (welkenraedt)": {
+  "lat": 50.6655,
+  "lng": 5.9264,
+  "town": "Henri-Chapelle",
+  "prov": "lg"
+ },
+ "4480|engis": {
+  "lat": 50.5576,
+  "lng": 5.3888,
+  "town": "Engis",
+  "prov": "lg"
+ },
+ "4020|liège": {
+  "lat": 50.6469,
+  "lng": 5.6265,
+  "town": "Jupille-sur-Meuse",
+  "prov": "lg"
+ },
+ "4990|sart-lierneux": {
+  "lat": 50.2692,
+  "lng": 5.8446,
+  "town": "Lierneux",
+  "prov": "lg"
+ },
+ "4280|hannut": {
+  "lat": 50.666,
+  "lng": 5.0731,
+  "town": "Hannut",
+  "prov": "lg"
+ },
+ "|saint-hubert": {
+  "lat": 50.0251,
+  "lng": 5.3739,
+  "town": "Saint-Hubert",
+  "prov": "lx"
+ },
+ "6880|bertrix": {
+  "lat": 49.854,
+  "lng": 5.246,
+  "town": "Bertrix",
+  "prov": "lx"
+ },
+ "|bastogne": {
+  "lat": 50.0023,
+  "lng": 5.7173,
+  "town": "Bastogne",
+  "prov": "lx"
+ },
+ "6700|arlon": {
+  "lat": 49.6773,
+  "lng": 5.7686,
+  "town": "Heinsch",
+  "prov": "lx"
+ },
+ "6860|léglise": {
+  "lat": 49.8099,
+  "lng": 5.5667,
+  "town": "Léglise",
+  "prov": "lx"
+ },
+ "6860|ebly (léglise)": {
+  "lat": 49.8529,
+  "lng": 5.5408,
+  "town": "Ebly",
+  "prov": "lx"
+ },
+ "6860|louftémont (léglise)": {
+  "lat": 49.7892,
+  "lng": 5.6273,
+  "town": "Louftémont",
+  "prov": "lx"
+ },
+ "1420|braine-l’alleud": {
+  "lat": 50.6942,
+  "lng": 4.3575,
+  "town": "Braine-l'Alleud",
+  "prov": "autre"
+ },
+ "4600|visé": {
+  "lat": 50.7348,
+  "lng": 5.6936,
+  "town": "Visé",
+  "prov": "lg"
+ },
+ "6200|châtelet": {
+  "lat": 50.3971,
+  "lng": 4.5224,
+  "town": "Bouffioulx",
+  "prov": "autre"
+ },
+ "6860|witry (léglise)": {
+  "lat": 49.8589,
+  "lng": 5.6139,
+  "town": "Witry",
+  "prov": "lx"
+ },
+ "|libramont-chevigny": {
+  "lat": 49.9499,
+  "lng": 5.4371,
+  "town": "Libramont-Chevigny",
+  "prov": "lx"
+ },
+ "6860|winville (léglise)": {
+  "lat": 49.883,
+  "lng": 5.6319,
+  "town": "Witry",
+  "prov": "lx"
+ },
+ "6724|houdemont (habay)": {
+  "lat": 49.7347,
+  "lng": 5.5609,
+  "town": "Houdemont",
+  "prov": "lx"
+ },
+ "6824|chassepierre (florenville)": {
+  "lat": 49.7102,
+  "lng": 5.2694,
+  "town": "Florenville",
+  "prov": "lx"
+ },
+ "6870|saint-hubert": {
+  "lat": 50.0379,
+  "lng": 5.3456,
+  "town": "Saint-Hubert",
+  "prov": "lx"
+ },
+ "6800|bras-haut": {
+  "lat": 49.9817,
+  "lng": 5.388,
+  "town": "Bras",
+  "prov": "lx"
+ },
+ "6800|nimbermont": {
+  "lat": 49.9637,
+  "lng": 5.5059,
+  "town": "Rondu",
+  "prov": "lx"
+ },
+ "6890|transinne": {
+  "lat": 50.0004,
+  "lng": 5.2027,
+  "town": "Transinne",
+  "prov": "lx"
+ },
+ "4800|verviers": {
+  "lat": 50.5846,
+  "lng": 5.8557,
+  "town": "Verviers",
+  "prov": "lg"
+ },
+ "5000|namur": {
+  "lat": 50.4612,
+  "lng": 4.8696,
+  "town": "Namur",
+  "prov": "autre"
+ }
+}

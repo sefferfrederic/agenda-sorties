@@ -24,6 +24,61 @@ export async function fetchText(url, { retries = 2 } = {}) {
   }
 }
 
+/**
+ * Comme fetchText, mais suit elle-même les redirections (nécessaire pour les sites
+ * dont l'authentification « invité » passe par un aller-retour /auth/callback qui
+ * dépose un cookie : fetch() ne rejoue pas ce cookie sur la requête suivante).
+ */
+export async function fetchTextWithCookies(url, { retries = 2, maxRedirects = 6 } = {}) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const wait = 1500 - (Date.now() - lastFetch);
+    if (wait > 0) await sleep(wait);
+    lastFetch = Date.now();
+    try {
+      const cookies = new Map();
+      let current = url;
+      for (let i = 0; i < maxRedirects; i++) {
+        const cookieHeader = [...cookies.entries()].map(([k, v]) => `${k}=${v}`).join('; ');
+        const res = await fetch(current, {
+          redirect: 'manual',
+          headers: {
+            'User-Agent': UA,
+            'Accept-Language': 'fr-BE,fr;q=0.9',
+            ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+          },
+          signal: AbortSignal.timeout(20000),
+        });
+        for (const sc of res.headers.getSetCookie?.() || []) {
+          const [pair] = sc.split(';');
+          const [k, v] = pair.split('=');
+          if (k) cookies.set(k.trim(), v);
+        }
+        if ([301, 302, 303, 307, 308].includes(res.status)) {
+          current = new URL(res.headers.get('location'), current).href;
+          continue;
+        }
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.text();
+      }
+      throw new Error('trop de redirections');
+    } catch (err) {
+      if (attempt === retries) throw new Error(`${url} : ${err.message}`);
+      await sleep(3000 * (attempt + 1));
+    }
+  }
+}
+
+/** Date/heure UTC (format JSON-LD avec « Z ») converties en heure de Bruxelles. */
+export function brusselsParts(isoUtc) {
+  const d = new Date(isoUtc);
+  const fmt = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Brussels',
+    year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+  });
+  const p = Object.fromEntries(fmt.formatToParts(d).map((x) => [x.type, x.value]));
+  return { date: `${p.year}-${p.month}-${p.day}`, time: `${p.hour}:${p.minute}` };
+}
+
 // ---------- Dates ----------
 export const pad = (n) => String(n).padStart(2, '0');
 export const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -37,7 +92,7 @@ export function addDays(isoDate, n) {
   return iso(d);
 }
 
-const MONTHS = {
+export const MONTHS = {
   janvier: 1, janv: 1, jan: 1, février: 2, fevrier: 2, févr: 2, fev: 2, fév: 2, mars: 3, mar: 3,
   avril: 4, avr: 4, mai: 5, juin: 6, juillet: 7, juil: 7, août: 8, aout: 8, aoû: 8,
   septembre: 9, sept: 9, sep: 9, octobre: 10, oct: 10, novembre: 11, nov: 11, décembre: 12,

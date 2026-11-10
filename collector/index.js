@@ -16,7 +16,7 @@ const OUT = path.join(DIR, '..', 'public', 'data', 'events.json');
 const OFFLINE = process.argv.includes('--offline');
 const TODAY = todayBrussels();
 const HORIZON = addDays(TODAY, 120);
-const CATS = ['brocante', 'marche', 'noel', 'soiree', 'concert', 'spectacle', 'fete', 'expo', 'balade', 'famille'];
+const CATS = ['brocante', 'marche', 'noel', 'soiree', 'concert', 'spectacle', 'fete', 'expo', 'balade', 'famille', 'salle'];
 const log = (...a) => console.log(...a);
 
 function readSeed(file) {
@@ -76,10 +76,10 @@ async function normalize(e) {
     }
   }
   if (!prov && e.postal) prov = provFromPostal(e.postal);
-  if (lat == null) return null; // impossible de situer l'événement
-  // Hors des deux provinces : on ne garde que les marchés de Noël.
+  if (lat == null || (lat === 0 && lng === 0)) return null; // impossible de situer l'événement
   const c = CATS.includes(e.c) ? e.c : guessCategory(e.rawCat, t) || guessCategory(e.rawDesc) || 'fete';
-  if (!['lg', 'lx'].includes(prov) && c !== 'noel') return null;
+  // Hors des deux provinces : on ne garde que les marchés de Noël et les grandes salles de concert.
+  if (!['lg', 'lx'].includes(prov) && c !== 'noel' && c !== 'salle') return null;
 
   const desc = e.desc || shortDesc(e.rawDesc || '', 150);
   const tm = e.tm || parseTime(e.h) || null;
