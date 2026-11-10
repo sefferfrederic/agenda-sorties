@@ -1,0 +1,10 @@
+{
+  "_info": "Rendez-vous réguliers (hebdomadaires) que les agendas ne listent pas toujours. wd = jours de la semaine (0 = dimanche).",
+  "events": [
+    {"t":"Brocante de Saint-Pholien","c":"brocante","town":"Liège (Outremeuse)","prov":"lg","lat":50.6420,"lng":5.5850,"wd":[5],"d1":"2026-01-01","d2":"2027-12-31","free":true,"desc":"La brocante du vendredi matin, très courue des Liégeois. Pas les jours fériés.","tags":["exterieur"],"src":"brocabrac","url":"https://brocabrac.fr/lg/brocante/"},
+    {"t":"Les Petites Puces de Saint-Gilles","c":"brocante","town":"Liège (Saint-Gilles)","prov":"lg","lat":50.6300,"lng":5.5550,"wd":[6],"d1":"2026-01-01","d2":"2027-12-31","tm":"06:00","h":"6h – 13h","free":true,"desc":"Près de 135 emplacements : vintage, déco, outillage. Boulevard Louis Hillier et cour Saint-Gilles.","tags":["exterieur"],"src":"brocabrac","url":"https://brocabrac.fr/lg/brocante/"},
+    {"t":"Brocante hebdomadaire de Spa","c":"brocante","town":"Spa","prov":"lg","lat":50.4920,"lng":5.8645,"wd":[0],"d1":"2026-01-01","d2":"2027-12-31","free":true,"desc":"Chaque dimanche, galerie Léopold et parc de 7 Heures.","tags":["exterieur"],"src":"brocabrac","url":"https://brocabrac.fr/lg/novembre"},
+    {"t":"Marché aux puces de Welkenraedt","c":"brocante","town":"Welkenraedt","prov":"lg","lat":50.6600,"lng":5.9700,"wd":[0],"d1":"2026-01-01","d2":"2027-12-31","h":"Le matin","tm":"07:00","free":true,"desc":"Chaque dimanche matin, place des Combattants.","tags":["exterieur"],"src":"brocabrac","url":"https://brocabrac.fr/lg/novembre"},
+    {"t":"Bourse toutes collections de Battice","c":"brocante","town":"Battice","prov":"lg","lat":50.6450,"lng":5.8250,"wdNth":[2,1],"d1":"2026-01-01","d2":"2027-12-31","free":null,"desc":"Le premier mardi du mois, au Cercle Saint-Vincent. Environ 30 exposants.","tags":["interieur"],"src":"brocabrac","url":"https://brocabrac.fr/lg/novembre"}
+  ]
+}
