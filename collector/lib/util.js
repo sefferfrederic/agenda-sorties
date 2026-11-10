@@ -88,19 +88,32 @@ const CAT_RULES = [
   ['noel', /no[eë]l|christmas|weihnacht|kerst|kr[eë]schtmoart|saint[- ]nicolas|nikolaus/i],
   ['brocante', /brocante|puces|vide[- ]grenier|bourse (aux|de|toutes)|collection|antiquit|braderie/i],
   ['marche', /march[ée]s? (de|du|des|aux|nocturnes?|fermiers?|artisanal|villageois|hebdomadaire)|\bmarch[ée]\b(?! adeps)(?=.*(producteur|terroir|artisan))|march[é]|terroir|salon|foire|artisan/i],
-  ['soiree', /afterwork|after[- ]work|ap[ée]ro|soir[ée]e|party|night|dj|karaok|th[ée] dansant|bal\b|blind ?test|quiz/i],
-  ['concert', /concert|rock|pop|jazz|blues|showcase|chorale|musique|festival|electro|rap/i],
+  ['soiree', /afterwork|after[- ]work|ap[ée]ro|soir[ée]e|party|\bnight\b|\bdj\b|karaok|th[ée] dansant|\bbal\b|blind ?test|quiz/i],
+  ['concert', /\bconcerts?\b|\brock\b|\bpop\b|jazz|blues|showcase|chorale|musique|musical|orchestre|fanfare|\brap\b|[ée]lectro\b/i],
   ['spectacle', /th[ée][aâ]tre|spectacle|com[ée]die|humour|stand[- ]up|impro|cirque|danse|op[ée]ra|cin[ée]ma|conte/i],
-  ['expo', /expo|mus[ée]e|art|patrimoine|photo|conf[ée]rence|histoire|science|visite/i],
-  ['fete', /f[êe]te|kermesse|carnaval|folklore|cort[èe]ge|ducasse|animation|halloween|souper|barbecue/i],
+  ['expo', /expo|ausstellung|mus[ée]e|peinture|sculpture|vernissage|galerie|\bart\b|patrimoine|photo|conf[ée]rence|histoire|science|visite/i],
+  ['fete', /f[êe]te|festival|kermesse|carnaval|folklore|cort[èe]ge|ducasse|animation|halloween|souper|barbecue/i],
   ['balade', /marche|balade|randonn|adeps|v[ée]lo|jogging|course|trail|sport|nature|promenade/i],
   ['famille', /enfant|jouet|famil|kids|pu[ée]riculture|atelier/i],
 ];
 
+// Types schema.org donnés par les agendas eux-mêmes (plus fiables que les mots du titre)
+const TYPE_CATS = {
+  ExhibitionEvent: 'expo', MusicEvent: 'concert', TheaterEvent: 'spectacle', ComedyEvent: 'spectacle',
+  DanceEvent: 'spectacle', ScreeningEvent: 'spectacle', LiteraryEvent: 'expo', EducationEvent: 'expo',
+  SportsEvent: 'balade', ChildrensEvent: 'famille', Festival: 'fete', FoodEvent: 'fete',
+};
+
+/** Catégorie déduite du texte ; null si rien ne correspond. */
 export function guessCategory(...texts) {
   const s = texts.filter(Boolean).join(' ');
-  for (const [cat, re] of CAT_RULES) if (re.test(s)) return cat;
-  return 'fete';
+  const typeCat = Object.entries(TYPE_CATS).find(([k]) => s.includes(k))?.[1];
+  for (const [cat, re] of CAT_RULES) {
+    // Noël, brocantes, marchés et soirées se reconnaissent au titre ; ensuite le type de l'agenda prime.
+    if (typeCat && !['noel', 'brocante', 'marche', 'soiree'].includes(cat)) return typeCat;
+    if (re.test(s)) return cat;
+  }
+  return typeCat || null;
 }
 
 export function guessTags(...texts) {

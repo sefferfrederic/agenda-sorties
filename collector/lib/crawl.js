@@ -37,10 +37,10 @@ export async function crawl({ src, listUrls, linkRe, max = 80, fallback, default
     });
   }
 
-  const events = [...listEvents];
-  const seen = new Set(listEvents.map((e) => e.url));
+  // Les fiches détaillées sont plus complètes (description, horaires) que les listes : on les lit d'abord.
+  const events = [];
+  const done = new Set();
   for (const url of [...links].slice(0, max)) {
-    if (seen.has(url)) continue;
     let html;
     try {
       html = await fetchText(url);
@@ -51,14 +51,20 @@ export async function crawl({ src, listUrls, linkRe, max = 80, fallback, default
     const ld = extractJsonLdEvents(html);
     if (ld.length) {
       for (const ev of ld) events.push({ ...fromSchemaEvent(ev, src, url), url, ...defaults });
+      done.add(url);
       continue;
     }
     if (fallback) {
       const $ = cheerio.load(html);
       const ev = fallback({ $, url, html, clean, parseFrDate, parseTime });
-      if (ev) events.push({ src, url, ...ev, ...defaults });
+      if (ev) {
+        events.push({ src, url, ...ev, ...defaults });
+        done.add(url);
+      }
     }
   }
+  // Événements des listes dont la fiche n'a pas pu être lue
+  for (const e of listEvents) if (!done.has(e.url)) events.push(e);
   return events;
 }
 
