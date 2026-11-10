@@ -372,7 +372,7 @@ function hoursText(e) {
 }
 function placeHtml(e) {
   const far = e.km > 40;
-  return `<span>${ICON.pin}${esc(e.town)} · <span class="mono">${Math.round(e.km)} km</span></span>` +
+  return `<span>${ICON.pin}${esc(e.v ? e.v + ', ' + e.town : e.town)} · <span class="mono">${Math.round(e.km)} km</span></span>` +
     (far ? `<span>${ICON.car}<span class="mono">≈ ${driveTime(e.km)}</span></span>` : '');
 }
 function datesText(e) {
@@ -546,7 +546,7 @@ function openDetail(id) {
     <div class="detail-grid">
       <div class="meta"><span>${ICON.cal}${esc(range || fmtLong(next || e.d1))}</span></div>
       <div class="meta"><span>${ICON.clock}<span class="mono">${esc(hoursText(e))}</span></span></div>
-      <div class="meta"><span>${ICON.pin}${esc(e.town)} · <span class="mono">${Math.round(e.km)} km de ${HOME.name}</span></span><span>${ICON.car}<span class="mono">≈ ${driveTime(e.km)} en voiture</span></span></div>
+      <div class="meta"><span>${ICON.pin}${esc(e.v ? e.v + ', ' + e.town : e.town)} · <span class="mono">${Math.round(e.km)} km de ${HOME.name}</span></span><span>${ICON.car}<span class="mono">≈ ${driveTime(e.km)} en voiture</span></span></div>
       ${e.desc ? `<p>${esc(e.desc)}</p>` : ''}
       ${e.x ? `<p class="extra">${esc(e.x)}</p>` : ''}
       ${tags ? `<div class="foot">${tags}</div>` : ''}

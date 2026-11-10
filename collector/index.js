@@ -78,7 +78,7 @@ async function normalize(e) {
   if (!prov && e.postal) prov = provFromPostal(e.postal);
   if (lat == null) return null; // impossible de situer l'événement
   // Hors des deux provinces : on ne garde que les marchés de Noël.
-  const c = CATS.includes(e.c) ? e.c : guessCategory(e.rawCat, t, e.rawDesc);
+  const c = CATS.includes(e.c) ? e.c : guessCategory(e.rawCat, t) || guessCategory(e.rawDesc) || 'fete';
   if (!['lg', 'lx'].includes(prov) && c !== 'noel') return null;
 
   const desc = e.desc || shortDesc(e.rawDesc || '', 150);
@@ -97,6 +97,7 @@ async function normalize(e) {
     ...(tm ? { tm } : {}),
     ...(h ? { h } : {}),
     town: clean(town || e.town),
+    ...(e.venue && clean(e.venue).toLowerCase() !== clean(town || e.town).toLowerCase() ? { v: clean(e.venue).slice(0, 60) } : {}),
     prov,
     lat: +(+lat).toFixed(4),
     lng: +(+lng).toFixed(4),
@@ -124,7 +125,8 @@ function sameEvent(a, b) {
   const ka = slug(a.t).slice(0, 28);
   const kb = slug(b.t).slice(0, 28);
   const titleMatch = ka === kb || (ka.length > 12 && (ka.includes(kb) || kb.includes(ka)));
-  return titleMatch && a.d1 <= b.d2 && b.d1 <= a.d2 && distanceKm(a, b) < 3;
+  // Même titre exact : la commune peut avoir été placée à quelques km selon la source.
+  return titleMatch && a.d1 <= b.d2 && b.d1 <= a.d2 && distanceKm(a, b) < (ka === kb ? 15 : 3);
 }
 const merged = [];
 for (const e of normalized) {
@@ -133,7 +135,7 @@ for (const e of normalized) {
     merged.push(e);
     continue;
   }
-  for (const k of ['tm', 'h', 'price', 'x', 'url']) if (!twin[k] && e[k]) twin[k] = e[k];
+  for (const k of ['tm', 'h', 'price', 'x', 'url', 'v']) if (!twin[k] && e[k]) twin[k] = e[k];
   if (twin.free == null) twin.free = e.free;
   if ((e.desc || '').length > (twin.desc || '').length) twin.desc = e.desc;
   twin.tags = [...new Set([...twin.tags, ...e.tags])];
