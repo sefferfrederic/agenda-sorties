@@ -41,11 +41,15 @@ jobs:
         working-directory: collector
         continue-on-error: true   # une mauvaise nuit ne bloque pas la publication
 
-      - name: Construire la page et les icônes
+      - name: Construire la page
+        run: node collector/build-page.js
+
+      - name: Construire les icônes
+        continue-on-error: true   # sans icône, l'appli fonctionne quand même
         run: |
-          node collector/build-page.js
-          convert -background none public/icon.svg -resize 192x192 public/icon-192.png
-          convert -background none public/icon.svg -resize 512x512 public/icon-512.png
+          which rsvg-convert || (sudo apt-get update -qq && sudo apt-get install -y -qq librsvg2-bin)
+          rsvg-convert -w 192 -h 192 public/icon.svg -o public/icon-192.png
+          rsvg-convert -w 512 -h 512 public/icon.svg -o public/icon-512.png
 
       - name: Enregistrer les données du jour
         if: github.event_name != 'push'
