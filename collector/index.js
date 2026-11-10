@@ -84,7 +84,10 @@ async function normalize(e) {
   const desc = e.desc || shortDesc(e.rawDesc || '', 150);
   const tm = e.tm || parseTime(e.h) || null;
   let h = e.h || null;
-  if (!h && tm) h = e.tmEnd ? `${tm.replace(':', 'h')} – ${e.tmEnd.replace(':', 'h')}` : `Dès ${tm.replace(':', 'h').replace('h00', 'h')}`;
+  const hh = (x) => x.replace(':', 'h').replace(/h00$/, 'h'); // « 20:00 » → « 20h », « 20:30 » → « 20h30 »
+  // Fin gardée si elle suit le début, ou si elle tombe dans la nuit (soirée 23h – 4h) ; sinon ignorée
+  const tmEnd = e.tmEnd && tm && e.tmEnd !== tm && (e.tmEnd > tm || e.tmEnd < '08:00') ? e.tmEnd : null;
+  if (!h && tm) h = tmEnd ? `${hh(tm)} – ${hh(tmEnd)}` : `Dès ${hh(tm)}`;
 
   return {
     t,
