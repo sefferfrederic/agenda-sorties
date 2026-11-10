@@ -123,39 +123,49 @@ async function tasoiree(log) {
 
 /** info-lux.com — très complet pour la province de Luxembourg, marchés et marchés de Noël. */
 async function infolux(log) {
+  const DATE_RE =
+    /\b\d{1,2}(?:er)?\s+(?:janv|févr|fevr|mars|avr|mai|juin|juil|août|aout|sept|oct|nov|déc|dec)[a-zéû]*\.?(?:\s+\d{4})?|\b\d{1,2}\/\d{1,2}\/\d{4}/gi;
   return crawl({
     src: 'info-lux',
     listUrls: [
       'https://www.info-lux.com/category/wallonie/province-de-luxembourg/',
+      'https://www.info-lux.com/category/wallonie/province-de-luxembourg/page/2/',
       'https://www.info-lux.com/category/liege/',
-      'https://www.info-lux.com/category/themes/marche/',
+      'https://www.info-lux.com/category/liege/page/2/',
     ],
-    linkRe: /info-lux\.com\/[^/]+-\d{4}\/?$|info-lux\.com\/\?p=\d+/,
-    max: 80,
-    fallback: (ctx) => {
-      const base = genericFallback(ctx);
-      if (!base) return null;
-      // Titres du type « Herbeumont > Balade > Petites Vadrouilles 2026 »
-      const parts = base.t.split(/\s*[>»]\s*/);
-      if (parts.length >= 3) {
-        base.town = parts[0];
-        base.rawCat = parts[1];
-        base.t = parts.slice(2).join(' – ').replace(/\s+20\d{2}$/, '');
-      }
-      return base;
+    // Fiches du type /satanyc-for-ever-…-2026/pays/belgique/wallonie/province-de-luxembourg/…/arlon/
+    linkRe: /info-lux\.com\/(?!category\/)[a-z0-9-]+\/pays\/belgique\/wallonie\//,
+    max: 90,
+    fallback: ({ $, clean, parseFrDate, parseTime }) => {
+      const text = clean($('body').text());
+      // Seules les fiches « agenda » ont un bloc Quand / Où / Combien ; les articles d'actualité n'en ont pas.
+      // « Quand Du 30 octobre au 27 novembre 2026Du lundi au samedi, 14 h-17 h 30… »
+      const quand = text.match(/Quand\s*:?\s*((?:Du|Le|Les|Ce|Chaque|Tous|Jusqu|À partir|Dès|\d).{0,160})/);
+      if (!quand) return null;
+      const seg = quand[1];
+      const yearEnd = seg.search(/\d{4}/);
+      const datePart = yearEnd >= 0 ? seg.slice(0, yearEnd + 4) : seg.slice(0, 60);
+      const dates = (datePart.match(DATE_RE) || []).map((d) => parseFrDate(d)).filter(Boolean).sort();
+      if (!dates.length) return null;
+      const hour = seg.slice(datePart.length).match(/(?:^|[^\d])(\d{1,2})\s*h\s*(\d{2})?/);
+      const combien = (text.match(/Combien\s*:?\s*(.{0,80})/) || [])[1] || '';
+      // Titre : « Arlon > Exposition > Satanyc For Ever, … (30 octobre – 27 novembre 2026) »
+      const h1 = clean($('h1').first().text());
+      const parts = h1.split(/\s*>\s*/);
+      const t = (parts.length >= 3 ? parts.slice(2).join(' – ') : h1).replace(/\s*\([^)]*\d{4}[^)]*\)\s*$/, '');
+      return {
+        t,
+        town: parts.length >= 3 ? parts[0] : '',
+        rawCat: parts.length >= 3 ? parts[1] : '',
+        rawDesc: clean($('meta[name="description"]').attr('content') || $('meta[property="og:description"]').attr('content')),
+        d1: dates[0],
+        d2: dates[dates.length - 1],
+        tm: hour ? parseTime(`${hour[1]}h${hour[2] || ''}`) : null,
+        free: /entr[ée]e libre|gratuit/i.test(combien) ? true : /€/.test(combien) ? false : null,
+        price: /€/.test(combien) ? clean(combien.match(/[\d,.]+\s*€/)?.[0]) || null : null,
+        fullText: text.slice(0, 2000),
+      };
     },
-    log,
-  });
-}
-
-/** visitwallonia.com — grands événements officiels. */
-async function visitwallonia(log) {
-  return crawl({
-    src: 'VisitWallonia',
-    listUrls: ['https://visitwallonia.com/fr-be/3/que-faire/agenda'],
-    linkRe: /\/fr-be\/content\/.+|\/fr-be\/\d+\/.+agenda.+\/.+/,
-    max: 40,
-    fallback: genericFallback,
     log,
   });
 }
@@ -165,5 +175,4 @@ export const SOURCES = [
   { name: 'brocabrac', run: brocabrac },
   { name: 'tasoiree.be', run: tasoiree },
   { name: 'info-lux', run: infolux },
-  { name: 'VisitWallonia', run: visitwallonia },
 ];
