@@ -358,5 +358,23 @@
   "lng": 4.8696,
   "town": "Namur",
   "prov": "autre"
+ },
+ "|seraing": {
+  "lat": 50.6152,
+  "lng": 5.5089,
+  "town": "Seraing",
+  "prov": "lg"
+ },
+ "5300|andenne": {
+  "lat": 50.4867,
+  "lng": 5.0578,
+  "town": "Bonneville",
+  "prov": "autre"
+ },
+ "6720|habay-la-neuve": {
+  "lat": 49.7357,
+  "lng": 5.6639,
+  "town": "Habay-la-Neuve",
+  "prov": "lx"
  }
 }
