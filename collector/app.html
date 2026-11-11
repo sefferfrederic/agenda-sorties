@@ -69,6 +69,7 @@ header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; 
 .icon-btn .dot { position: absolute; top: 6px; right: 6px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font-size: 10px; font-weight: 700; display: grid; place-items: center; }
 
 .days { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-block: 8px; scroll-snap-type: x proximity; }
+.days[hidden] { display: none; }
 .days::-webkit-scrollbar { display: none; }
 .day { flex: none; width: 52px; padding: 6px 0 7px; border-radius: 12px; text-align: center; background: var(--surface); border: 1px solid var(--line); scroll-snap-align: start; }
 .day .dn { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
@@ -85,8 +86,7 @@ header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; 
 .search-bar input { width: 100%; padding: 10px 14px; border-radius: 12px; border: none; background: var(--chip); color: var(--ink); font: inherit; font-size: 16px; }
 .search-bar input:focus { outline: 2px solid var(--accent); outline-offset: -2px; }
 
-.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-block: 2px 10px; }
-.chips::-webkit-scrollbar { display: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; padding-block: 2px 10px; }
 .chip { flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; background: var(--chip); font-weight: 600; font-size: 14px; white-space: nowrap; }
 .chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--cc, var(--muted)); }
 .chip[aria-pressed="true"] { background: var(--cc, var(--ink)); color: #fff; }
@@ -291,6 +291,7 @@ const state = {
   free: store.get('free', false),
   moment: store.get('moment', 'all'),    // all | matin | aprem | soir
   q: '',
+  venue: '',                               // filtre « salle » dans l'onglet Grandes salles
   view: 'list',                           // list | fav | map
   favs: new Set(store.get('favs', [])),
 };
@@ -472,23 +473,28 @@ function renderNoel() {
 }
 
 function renderSalles() {
-  dayHead();
+  $('#title').textContent = 'Prochains concerts';
   $('#eyebrow').textContent = 'Grandes salles de concert · partout en Belgique';
-  const list = DATA.events.filter((e) => e.c === 'salle' && e.d2 >= TODAY && passes(e, { ignoreDay: true }))
-    .sort((a, b) => a.d1.localeCompare(b.d1) || (a.tm || '99').localeCompare(b.tm || '99'));
-  let html = `<div class="dayhead"><h2>${list.length} concert${list.length > 1 ? 's' : ''} à l'affiche</h2><span>classés par salle</span></div>`;
+  const all = DATA.events.filter((e) => e.c === 'salle' && e.d2 >= TODAY && passes(e, { ignoreDay: true }));
   const byVenue = new Map();
-  for (const e of list) {
+  for (const e of all) {
     const key = e.v || e.town;
     if (!byVenue.has(key)) byVenue.set(key, []);
     byVenue.get(key).push(e);
   }
-  const venues = [...byVenue.entries()].sort((a, b) => Math.min(...a[1].map((e) => e.km)) - Math.min(...b[1].map((e) => e.km)));
-  for (const [venue, evs] of venues) {
-    const km = Math.round(Math.min(...evs.map((e) => e.km)));
-    html += `<section class="group"><h3>${esc(venue)} <span class="mono" style="font-weight:500;color:var(--muted)">· ${km} km</span></h3><div class="cards">${evs.map((e) => card(e)).join('')}</div></section>`;
-  }
-  if (!list.length) html += '<div class="empty"><strong>Rien de programmé pour l’instant</strong><span>Revenez plus tard.</span></div>';
+  const venueKm = new Map([...byVenue].map(([v, evs]) => [v, Math.round(Math.min(...evs.map((e) => e.km)))]));
+  const venues = [...byVenue.keys()].sort((a, b) => venueKm.get(a) - venueKm.get(b));
+  if (state.venue && !byVenue.has(state.venue)) state.venue = '';
+  const list = (state.venue ? all.filter((e) => (e.v || e.town) === state.venue) : all)
+    .sort((a, b) => a.d1.localeCompare(b.d1) || (a.tm || '99').localeCompare(b.tm || '99'));
+
+  let html = `<div class="chips" id="venueChips" role="toolbar" aria-label="Salle">` +
+    `<button class="chip all" data-venue="" aria-pressed="${state.venue === '' ? 'true' : 'false'}">Toutes</button>` +
+    venues.map((v) => `<button class="chip" data-venue="${esc(v)}" aria-pressed="${state.venue === v ? 'true' : 'false'}">${esc(v)} <span class="mono" style="opacity:.7">· ${venueKm.get(v)} km</span></button>`).join('') +
+    `</div>`;
+  html += `<div class="dayhead"><h2>${list.length} concert${list.length > 1 ? 's' : ''} à l'affiche</h2><span>${state.venue ? esc(state.venue) : 'toutes salles, par date'}</span></div>`;
+  if (list.length) html += `<div class="cards">${list.map((e) => card(e)).join('')}</div>`;
+  else html += '<div class="empty"><strong>Rien de programmé pour l’instant</strong><span>Revenez plus tard.</span></div>';
   html += updatedHtml();
   $('#main').innerHTML = html;
 }
@@ -541,6 +547,7 @@ function updatedHtml() {
 function render() {
   for (const e of DATA.events) e.km ??= km(HOME, e);
   renderChips(); renderDays(); renderActiveFilters();
+  $('#days').hidden = salleOnly();
   $('#btnFav').setAttribute('aria-pressed', state.view === 'fav');
   $('#btnMap').setAttribute('aria-pressed', state.view === 'map');
   if (map) { map.remove(); map = null; }
@@ -652,6 +659,10 @@ document.addEventListener('click', (ev) => {
     if (!c) state.cats.clear(); else state.cats.has(c) ? state.cats.delete(c) : state.cats.add(c);
     if (state.view === 'fav') state.view = 'list';
     persist(); render(); return;
+  }
+  if (t.dataset.venue !== undefined) {
+    state.venue = t.dataset.venue === state.venue ? '' : t.dataset.venue;
+    render(); window.scrollTo({ top: 0 }); return;
   }
   if (t.dataset.set) {
     let v = t.dataset.val;
