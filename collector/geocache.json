@@ -376,5 +376,107 @@
   "lng": 5.6639,
   "town": "Habay-la-Neuve",
   "prov": "lx"
+ },
+ "|arlon": {
+  "lat": 49.6835,
+  "lng": 5.8168,
+  "town": "Arlon",
+  "prov": "lx"
+ },
+ "|nassogne": {
+  "lat": 50.1287,
+  "lng": 5.3419,
+  "town": "Nassogne",
+  "prov": "lx"
+ },
+ "|hotton": {
+  "lat": 50.2676,
+  "lng": 5.4342,
+  "town": "Hotton",
+  "prov": "lx"
+ },
+ "|musson": {
+  "lat": 49.5581,
+  "lng": 5.7059,
+  "town": "Musson",
+  "prov": "lx"
+ },
+ "|aubange": {
+  "lat": 49.5672,
+  "lng": 5.8045,
+  "town": "Aubange",
+  "prov": "lx"
+ },
+ "4987|la gleize": {
+  "lat": 50.4112,
+  "lng": 5.8465,
+  "town": "La Gleize",
+  "prov": "lg"
+ },
+ "5530|spontin (yvoir)": {
+  "lat": 50.3226,
+  "lng": 5.0069,
+  "town": "Spontin",
+  "prov": "autre"
+ },
+ "|bouillon": {
+  "lat": 49.795,
+  "lng": 5.0673,
+  "town": "Bouillon",
+  "prov": "lx"
+ },
+ "|marche-en-famenne": {
+  "lat": 50.2271,
+  "lng": 5.342,
+  "town": "Marche-en-Famenne",
+  "prov": "lx"
+ },
+ "|gouvy": {
+  "lat": 50.1904,
+  "lng": 5.9146,
+  "town": "Gouvy",
+  "prov": "lx"
+ },
+ "|vielsalm": {
+  "lat": 50.2842,
+  "lng": 5.9163,
+  "town": "Vielsalm",
+  "prov": "lx"
+ },
+ "|étalle": {
+  "lat": 49.6729,
+  "lng": 5.5984,
+  "town": "Étalle",
+  "prov": "lx"
+ },
+ "6761|latour (virton)": {
+  "lat": 49.5594,
+  "lng": 5.5653,
+  "town": "Virton",
+  "prov": "lx"
+ },
+ "6724|marbehan": {
+  "lat": 49.7255,
+  "lng": 5.5362,
+  "town": "Marbehan",
+  "prov": "lx"
+ },
+ "6600|bastogne": {
+  "lat": 50.0157,
+  "lng": 5.7615,
+  "town": "Wardin",
+  "prov": "lx"
+ },
+ "5580|rochefort": {
+  "lat": 50.157,
+  "lng": 5.1692,
+  "town": "Éprave",
+  "prov": "autre"
+ },
+ "1332|genval (rixensart)": {
+  "lat": 50.7225,
+  "lng": 4.5004,
+  "town": "Genval",
+  "prov": "autre"
  }
 }
