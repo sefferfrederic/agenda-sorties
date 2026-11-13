@@ -478,5 +478,23 @@
   "lng": 4.5004,
   "town": "Genval",
   "prov": "autre"
+ },
+ "4920|remouchamps": {
+  "lat": 50.4795,
+  "lng": 5.7126,
+  "town": "Remouchamps",
+  "prov": "lg"
+ },
+ "4960|malmedy": {
+  "lat": 50.4315,
+  "lng": 6.0416,
+  "town": "Bévercé",
+  "prov": "lg"
+ },
+ "1400|nivelles": {
+  "lat": 50.5915,
+  "lng": 4.3229,
+  "town": "Nivelles",
+  "prov": "autre"
  }
 }
