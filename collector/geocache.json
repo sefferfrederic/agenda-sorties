@@ -496,5 +496,29 @@
   "lng": 4.3229,
   "town": "Nivelles",
   "prov": "autre"
+ },
+ "6890|redu (libin)": {
+  "lat": 50.0078,
+  "lng": 5.1602,
+  "town": "Redu",
+  "prov": "lx"
+ },
+ "6920|wellin": {
+  "lat": 50.0614,
+  "lng": 5.0794,
+  "town": "Wellin",
+  "prov": "lx"
+ },
+ "6800|libramont-chevigny": {
+  "lat": 49.9462,
+  "lng": 5.4224,
+  "town": "Bras",
+  "prov": "lx"
+ },
+ "1460|ittre": {
+  "lat": 50.6409,
+  "lng": 4.2483,
+  "town": "Ittre",
+  "prov": "autre"
  }
 }
