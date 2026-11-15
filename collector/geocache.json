@@ -520,5 +520,11 @@
   "lng": 4.2483,
   "town": "Ittre",
   "prov": "autre"
+ },
+ "|waremme": {
+  "lat": 50.6977,
+  "lng": 5.2546,
+  "town": "Waremme",
+  "prov": "lg"
  }
 }
