@@ -526,5 +526,59 @@
   "lng": 5.2546,
   "town": "Waremme",
   "prov": "lg"
+ },
+ "|modave": {
+  "lat": 50.4716,
+  "lng": 5.2901,
+  "town": "Modave",
+  "prov": "lg"
+ },
+ "|huy": {
+  "lat": 50.5031,
+  "lng": 5.173,
+  "town": "Huy",
+  "prov": "lg"
+ },
+ "|liers": {
+  "lat": 50.6982,
+  "lng": 5.5691,
+  "town": "Herstal",
+  "prov": "lg"
+ },
+ "|theux": {
+  "lat": 50.5349,
+  "lng": 5.8133,
+  "town": "Theux",
+  "prov": "lg"
+ },
+ "|antheit": {
+  "lat": 50.5512,
+  "lng": 5.2359,
+  "town": "Antheit",
+  "prov": "lg"
+ },
+ "|lierneux": {
+  "lat": 50.2858,
+  "lng": 5.7922,
+  "town": "Lierneux",
+  "prov": "lg"
+ },
+ "|tilff": {
+  "lat": 50.5696,
+  "lng": 5.5844,
+  "town": "Tilff",
+  "prov": "lg"
+ },
+ "|rocourt": {
+  "lat": 50.6754,
+  "lng": 5.5518,
+  "town": "Liège",
+  "prov": "lg"
+ },
+ "1348|louvain-la-neuve": {
+  "lat": 50.6723,
+  "lng": 4.6161,
+  "town": "Ottignies-Louvain-la-Neuve",
+  "prov": "autre"
  }
 }
