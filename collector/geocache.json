@@ -580,5 +580,56 @@
   "lng": 4.6161,
   "town": "Ottignies-Louvain-la-Neuve",
   "prov": "autre"
+ },
+ "|blegny": {
+  "lat": 50.6727,
+  "lng": 5.7252,
+  "town": "Blegny",
+  "prov": "lg"
+ },
+ "|dison": {
+  "lat": 50.6114,
+  "lng": 5.8547,
+  "town": "Dison",
+  "prov": "lg"
+ },
+ "|oupeye": {
+  "lat": 50.7171,
+  "lng": 5.6425,
+  "town": "Oupeye",
+  "prov": "lg"
+ },
+ "|trooz": {
+  "lat": 50.5728,
+  "lng": 5.6884,
+  "town": "Trooz",
+  "prov": "lg"
+ },
+ "|crisnée": {
+  "lat": 50.7159,
+  "lng": 5.3973,
+  "town": "Crisnée",
+  "prov": "lg"
+ },
+ "|la roche-en-ardenne": {
+  "lat": 50.1816,
+  "lng": 5.5759,
+  "town": "La Roche-en-Ardenne",
+  "prov": "lx"
+ },
+ "|harmoncourt": {
+  "miss": true
+ },
+ "4190|ferrières": {
+  "lat": 50.4072,
+  "lng": 5.6208,
+  "town": "Ferrières",
+  "prov": "lg"
+ },
+ "4987|rahier": {
+  "lat": 50.3859,
+  "lng": 5.7785,
+  "town": "Rahier",
+  "prov": "lg"
  }
 }
