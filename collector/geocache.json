@@ -631,5 +631,11 @@
   "lng": 5.7785,
   "town": "Rahier",
   "prov": "lg"
+ },
+ "|durbuy": {
+  "lat": 50.3648,
+  "lng": 5.5109,
+  "town": "Durbuy",
+  "prov": "lx"
  }
 }
