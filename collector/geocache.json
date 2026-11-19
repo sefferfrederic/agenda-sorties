@@ -637,5 +637,65 @@
   "lng": 5.5109,
   "town": "Durbuy",
   "prov": "lx"
+ },
+ "|mons-lez-liège": {
+  "lat": 50.6156,
+  "lng": 5.4402,
+  "town": "Flémalle",
+  "prov": "lg"
+ },
+ "|ruette": {
+  "lat": 49.5302,
+  "lng": 5.5893,
+  "town": "Virton",
+  "prov": "lx"
+ },
+ "|lesterny": {
+  "lat": 50.1057,
+  "lng": 5.2901,
+  "town": "Nassogne",
+  "prov": "lx"
+ },
+ "|sainte-cécile": {
+  "lat": 49.7462,
+  "lng": 5.2261,
+  "town": "Florenville",
+  "prov": "lx"
+ },
+ "|houffalize": {
+  "lat": 50.1324,
+  "lng": 5.7887,
+  "town": "Houffalize",
+  "prov": "lx"
+ },
+ "|hargimont": {
+  "lat": 50.1826,
+  "lng": 5.3145,
+  "town": "Marche-en-Famenne",
+  "prov": "lx"
+ },
+ "|herbeumont": {
+  "lat": 49.7815,
+  "lng": 5.2378,
+  "town": "Herbeumont",
+  "prov": "lx"
+ },
+ "5500|dinant": {
+  "lat": 50.2356,
+  "lng": 4.9157,
+  "town": "Anseremme",
+  "prov": "autre"
+ },
+ "6000|charleroi": {
+  "lat": 50.4163,
+  "lng": 4.4485,
+  "town": "Charleroi",
+  "prov": "autre"
+ },
+ "5580|han-sur-lesse (rochefort)": {
+  "lat": 50.1255,
+  "lng": 5.1877,
+  "town": "Han-sur-Lesse",
+  "prov": "autre"
  }
 }
