@@ -697,5 +697,35 @@
   "lng": 5.1877,
   "town": "Han-sur-Lesse",
   "prov": "autre"
+ },
+ "4400|flémalle": {
+  "lat": 50.597,
+  "lng": 5.4413,
+  "town": "Flémalle",
+  "prov": "lg"
+ },
+ "4347|fexhe-le-haut-clocher": {
+  "lat": 50.6637,
+  "lng": 5.4021,
+  "town": "Fexhe-le-Haut-Clocher",
+  "prov": "lg"
+ },
+ "7000|mons": {
+  "lat": 50.4562,
+  "lng": 3.9631,
+  "town": "Mons",
+  "prov": "autre"
+ },
+ "1370|jodoigne": {
+  "lat": 50.7284,
+  "lng": 4.8603,
+  "town": "Jodoigne",
+  "prov": "autre"
+ },
+ "2170|anvers": {
+  "lat": 51.2514,
+  "lng": 4.444,
+  "town": "Merksem",
+  "prov": "autre"
  }
 }
