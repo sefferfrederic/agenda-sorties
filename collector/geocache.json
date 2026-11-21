@@ -727,5 +727,47 @@
   "lng": 4.444,
   "town": "Merksem",
   "prov": "autre"
+ },
+ "5590|ciney": {
+  "lat": 50.2695,
+  "lng": 5.1226,
+  "town": "Leignon",
+  "prov": "autre"
+ },
+ "4990|lierneux": {
+  "lat": 50.3078,
+  "lng": 5.7855,
+  "town": "Lierneux",
+  "prov": "lg"
+ },
+ "4681|hermalle-sous-argenteau": {
+  "lat": 50.7162,
+  "lng": 5.6751,
+  "town": "Hermalle-sous-Argenteau",
+  "prov": "lg"
+ },
+ "6983|ortho (la roche-en-ardenne)": {
+  "lat": 50.1302,
+  "lng": 5.6286,
+  "town": "Ortho",
+  "prov": "lx"
+ },
+ "6800|libramont": {
+  "lat": 49.9462,
+  "lng": 5.4224,
+  "town": "Bras",
+  "prov": "lx"
+ },
+ "5580|lavaux-sainte-anne": {
+  "lat": 50.1142,
+  "lng": 5.0941,
+  "town": "Lavaux-Sainte-Anne",
+  "prov": "autre"
+ },
+ "1000|bruxelles": {
+  "lat": 50.8469,
+  "lng": 4.3667,
+  "town": "Bruxelles - Brussel",
+  "prov": "autre"
  }
 }
