@@ -769,5 +769,53 @@
   "lng": 4.3667,
   "town": "Bruxelles - Brussel",
   "prov": "autre"
+ },
+ "6800|freux": {
+  "lat": 49.9708,
+  "lng": 5.4497,
+  "town": "Freux",
+  "prov": "lx"
+ },
+ "4950|faymonville": {
+  "lat": 50.4051,
+  "lng": 6.1398,
+  "town": "Faymonville",
+  "prov": "lg"
+ },
+ "6810|jamoigne": {
+  "lat": 49.6958,
+  "lng": 5.4205,
+  "town": "Jamoigne",
+  "prov": "lx"
+ },
+ "6810|chiny": {
+  "lat": 49.7121,
+  "lng": 5.3733,
+  "town": "Izel",
+  "prov": "lx"
+ },
+ "7130|binche": {
+  "lat": 50.4247,
+  "lng": 4.1224,
+  "town": "Binche",
+  "prov": "autre"
+ },
+ "7301|hornu (boussu)": {
+  "lat": 50.424,
+  "lng": 3.8208,
+  "town": "Hornu",
+  "prov": "autre"
+ },
+ "|la louvière": {
+  "lat": 50.4794,
+  "lng": 4.1856,
+  "town": "La Louvière",
+  "prov": "autre"
+ },
+ "1360|thorembais-les-béguines (perwez)": {
+  "lat": 50.6529,
+  "lng": 4.8151,
+  "town": "Perwez",
+  "prov": "autre"
  }
 }
