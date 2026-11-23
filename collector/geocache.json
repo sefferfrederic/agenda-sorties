@@ -817,5 +817,29 @@
   "lng": 4.8151,
   "town": "Perwez",
   "prov": "autre"
+ },
+ "|malmedy": {
+  "lat": 50.4265,
+  "lng": 6.0276,
+  "town": "Malmedy",
+  "prov": "lg"
+ },
+ "|eupen": {
+  "lat": 50.6306,
+  "lng": 6.0313,
+  "town": "Eupen",
+  "prov": "lg"
+ },
+ "|olne": {
+  "lat": 50.5901,
+  "lng": 5.748,
+  "town": "Olne",
+  "prov": "lg"
+ },
+ "|chaineux": {
+  "lat": 50.6319,
+  "lng": 5.8343,
+  "town": "Chaineux",
+  "prov": "lg"
  }
 }
