@@ -841,5 +841,23 @@
   "lng": 5.8343,
   "town": "Chaineux",
   "prov": "lg"
+ },
+ "|verlaine": {
+  "lat": 50.6075,
+  "lng": 5.3184,
+  "town": "Verlaine",
+  "prov": "lg"
+ },
+ "|clermont": {
+  "lat": 50.659,
+  "lng": 5.8837,
+  "town": "Clermont",
+  "prov": "lg"
+ },
+ "|saive": {
+  "lat": 50.6526,
+  "lng": 5.682,
+  "town": "Saive",
+  "prov": "lg"
  }
 }
