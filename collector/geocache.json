@@ -859,5 +859,17 @@
   "lng": 5.682,
   "town": "Saive",
   "prov": "lg"
+ },
+ "|ensival": {
+  "lat": 50.5786,
+  "lng": 5.848,
+  "town": "Ensival",
+  "prov": "lg"
+ },
+ "6690|vielsalm": {
+  "lat": 50.2627,
+  "lng": 5.8716,
+  "town": "Vielsalm",
+  "prov": "lx"
  }
 }
