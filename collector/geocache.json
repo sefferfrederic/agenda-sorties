@@ -871,5 +871,35 @@
   "lng": 5.8716,
   "town": "Vielsalm",
   "prov": "lx"
+ },
+ "|neupré": {
+  "lat": 50.5432,
+  "lng": 5.4901,
+  "town": "Neupré",
+  "prov": "lg"
+ },
+ "2170|antwerpen": {
+  "lat": 51.2514,
+  "lng": 4.444,
+  "town": "Merksem",
+  "prov": "autre"
+ },
+ "6856|fays-les-veneurs": {
+  "lat": 49.8571,
+  "lng": 5.1622,
+  "town": "Fays-les-Veneurs",
+  "prov": "lx"
+ },
+ "|houdemont": {
+  "lat": 49.7189,
+  "lng": 5.5843,
+  "town": "Houdemont",
+  "prov": "lx"
+ },
+ "|tenneville": {
+  "lat": 50.0996,
+  "lng": 5.4975,
+  "town": "Tenneville",
+  "prov": "lx"
  }
 }
