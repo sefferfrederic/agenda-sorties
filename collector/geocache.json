@@ -901,5 +901,23 @@
   "lng": 5.4975,
   "town": "Tenneville",
   "prov": "lx"
+ },
+ "4032|chênée": {
+  "lat": 50.6141,
+  "lng": 5.6237,
+  "town": "Chênée",
+  "prov": "lg"
+ },
+ "6692|petit-thier": {
+  "lat": 50.2964,
+  "lng": 5.9847,
+  "town": "Vielsalm",
+  "prov": "lx"
+ },
+ "|louvain-la-neuve": {
+  "lat": 50.6741,
+  "lng": 4.6138,
+  "town": "Ottignies-Louvain-la-Neuve",
+  "prov": "autre"
  }
 }
