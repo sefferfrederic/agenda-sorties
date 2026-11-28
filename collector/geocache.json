@@ -919,5 +919,11 @@
   "lng": 4.6138,
   "town": "Ottignies-Louvain-la-Neuve",
   "prov": "autre"
+ },
+ "|bertrix": {
+  "lat": 49.8547,
+  "lng": 5.2529,
+  "town": "Bertrix",
+  "prov": "lx"
  }
 }
